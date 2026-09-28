@@ -18,14 +18,23 @@
   .slide.active{display:block;}
   .navbtn{width:40px;height:40px;border-radius:50%;border:none;background:#FFFFFF;color:#E85C7B;font-size:24px;font-weight:800;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px rgba(0,0,0,.15);transition:transform .12s ease;}
   .navbtn:hover{transform:scale(1.1);background:#FF8FAB;color:#FFFFFF;}
+  .navbtn.on{background:#FF8FAB;color:#FFFFFF;box-shadow:0 0 0 3px #FFE1E9;}
   .pageind{font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#E85C7B;min-width:70px;text-align:center;}
-  #drawCanvas{position:absolute;inset:0;width:100%;height:100%;z-index:40;pointer-events:none;touch-action:none;}
-  .toolbtn{width:42px;height:42px;border-radius:50%;border:none;background:#FFFFFF;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:20px;box-shadow:0 2px 8px rgba(0,0,0,.15);transition:transform .12s ease;}
-  .toolbtn:hover{transform:scale(1.08);}
-  .toolbtn.active{background:#FF8FAB;box-shadow:0 0 0 3px #FFE1E9;}
-  .colordot{width:26px;height:26px;border-radius:50%;border:3px solid transparent;cursor:pointer;transition:transform .12s ease;}
-  .colordot:hover{transform:scale(1.12);}
-  .colordot.active{border-color:#3A3550;}
+  .ink{position:absolute;inset:0;width:100%;height:100%;z-index:40;pointer-events:none;touch-action:none;}
+  body.pen .ink{pointer-events:auto;cursor:crosshair;}
+  body.pen .edge{display:none !important;}
+  .pentools{position:fixed;left:50%;bottom:70px;transform:translateX(-50%);z-index:50;display:none;align-items:center;gap:8px;background:rgba(255,255,255,.97);border-radius:999px;box-shadow:0 8px 28px rgba(18,24,38,.28);padding:8px 16px;white-space:nowrap;}
+  body.pen .pentools{display:flex;}
+  .pentools button{flex:0 0 auto;border:2px solid transparent;background:#FFE1E9;border-radius:999px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:16px;padding:6px 16px;height:36px;cursor:pointer;color:#3A3550;transition:transform .1s ease;}
+  .pentools button:hover{transform:scale(1.05);}
+  .pentools button.on{background:#E85C7B;color:#FFFFFF;}
+  .pentools .clr{width:30px;height:30px;padding:0;border:3px solid #FFFFFF;box-shadow:0 0 0 2px #CBD5E1;}
+  .pentools .clr.on{box-shadow:0 0 0 3px #E85C7B;}
+  .pentools .sz{width:36px;padding:0;display:flex;align-items:center;justify-content:center;background:#FFE1E9;}
+  .pentools .sz i{display:block;background:#3A3550;border-radius:50%;}
+  .pentools .sz.on{background:#E85C7B;}
+  .pentools .sz.on i{background:#FFFFFF;}
+  .pentools .sep{width:2px;height:24px;background:#E2E8F0;margin:0 2px;}
 </style>
 </head>
 <body>
@@ -41,7 +50,7 @@
 <span style="display:inline-block;background:#FFFFFF;color:#2BAE87;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:24px;padding:8px 24px;border-radius:999px;">⚖️ 균형가격</span>
 </div>
 <div style="font-size:29px;color:#8B84A3;margin-top:34px;">가격이 움직일 때, 사고 파는 마음도 같이 움직여요</div>
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 
@@ -78,12 +87,12 @@
   </div>
 </div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FF8FAB;border-radius:36px;box-sizing:border-box;padding:58px 70px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#FFFFFF;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FFFFFF;opacity:.85;"></div>
 <div style="width:150px;height:150px;border-radius:50%;background:#FFFFFF;color:#E85C7B;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:69px;display:flex;align-items:center;justify-content:center;margin-bottom:30px;">01</div>
 <div style="font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:56px;">수요 함수</div>
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">1. 수요 함수(수요곡선)</div>
@@ -92,7 +101,7 @@
 <div style="font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:56px;color:#3A3550;margin:0 0 16px 0;line-height:1.25;">수요함수란?</div>
 <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:18px;min-height:0;"><div style="background:#FFFFFF;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);"><div style="font-size:34px;line-height:1.6;">가격 <b style="color:#E85C7B;">P</b> <b>(독립변수)</b> → 수요량 <b style="color:#E85C7B;">Q</b> <b>(종속변수)</b></div></div><div style="display:flex;align-items:stretch;gap:2px;"><div style="background:#FFE1E9;color:#E85C7B;border-radius:18px;padding:16px 20px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:23px;text-align:center;flex:1;">가격 ↑ 상승</div><div style="display:flex;align-items:center;color:#8B84A3;font-size:32px;padding:0 4px;">&#8594;</div><div style="background:#FF8FAB;color:#FFFFFF;border-radius:18px;padding:16px 20px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:23px;text-align:center;flex:1;">수요량 ↓ 감소</div></div><div style="display:flex;align-items:stretch;gap:2px;"><div style="background:#FFE1E9;color:#E85C7B;border-radius:18px;padding:16px 20px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:23px;text-align:center;flex:1;">가격 ↓ 하락</div><div style="display:flex;align-items:center;color:#8B84A3;font-size:32px;padding:0 4px;">&#8594;</div><div style="background:#FF8FAB;color:#FFFFFF;border-radius:18px;padding:16px 20px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:23px;text-align:center;flex:1;">수요량 ↑ 증가</div></div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">1. 수요 함수(수요곡선)</div>
@@ -108,7 +117,7 @@
   <text x="339" y="266" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="20" fill="#3A3550">Q</text>
   <text x="34" y="260" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="15" fill="#8B84A3">O</text><line x1="75" y1="45" x2="300" y2="215" stroke="#FF8FAB" stroke-width="5" stroke-linecap="round" /><text x="230" y="90" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="22" font-weight="700" fill="#E85C7B" text-anchor="start">Q = d(P)</text></svg></div></div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">1. 수요 함수(수요곡선)</div>
@@ -117,7 +126,7 @@
 <div style="font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:46px;color:#3A3550;margin:0 0 16px 0;line-height:1.25;">왜 축이 반대로 그려질까?</div>
 <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:18px;min-height:0;"><div style="background:#EEE7FC;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:27px;line-height:1.7;">상품 가격 P에 따라 수요량이 결정되므로 수요함수에서 <b style="color:#E85C7B;">독립변수는 P</b>, <b style="color:#E85C7B;">종속변수는 Q</b>이다.<br><br>수학에서는 독립변수를 가로축에 놓지만, 수요 · 공급곡선은 관습적으로 독립변수인 가격을 <b style="color:#E85C7B;">세로축</b>에 놓는다.</div><div style="display:inline-flex;align-items:center;gap:10px;background:#FFD873;color:#3A3550;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:29px;padding:12px 30px;border-radius:999px;margin-bottom:20px;">⚠️ 가격이 상승하면 수요량이 감소한다고 해석해야 해요</div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">1. 수요 함수(수요곡선)</div>
@@ -129,7 +138,7 @@
   <div style="background:#FFE1E9;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);flex:1;font-size:24px;"><b style="color:#E85C7B;">[3]</b> 가격이 1,300원일 때 수요량을 구하시오.</div>
   </div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">1. 수요 함수(수요곡선)</div>
@@ -137,7 +146,7 @@
 <div style="display:inline-flex;align-items:center;gap:10px;background:#FFD873;color:#3A3550;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:29px;padding:12px 30px;border-radius:999px;margin-bottom:20px;">✏️ 함께하기 1 · 정답</div>
 <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:12px;min-height:0;"><div style="background:#FFFFFF;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:27px;">[1] 가격 2,000원일 때 수요량은 <b style="color:#E85C7B;">60개</b>, 2,500원일 때는 <b style="color:#E85C7B;">40개</b></div><div style="background:#FFFFFF;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:27px;">[2] d(2000)=60, d(2500)=40 을 연립해 풀면 a = <b style="color:#E85C7B;">-1/25</b>, b = <b style="color:#E85C7B;">140</b></div><div style="background:#FFFFFF;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:27px;">[3] d(1300) = -1/25×1,300+140 = <b style="color:#E85C7B;">88개</b></div><div style="background:#4FD9AE;color:#FFFFFF;border-radius:20px;padding:22px 30px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:34px;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.1);">답 &nbsp; [1] 60개, 40개 &nbsp; [2] a=-1/25, b=140 &nbsp; [3] 88개</div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">1. 수요 함수(수요곡선)</div>
@@ -146,7 +155,7 @@
 <div style="font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:46px;color:#3A3550;margin:0 0 16px 0;line-height:1.25;">수요량의 변동 vs 수요의 변동</div>
 <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:20px;min-height:0;"><div style="background:#FFFFFF;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);"><span style="font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:32px;color:#E85C7B;margin-right:16px;">수요량의 변동</span><span style="font-size:29px;">가격 변화 → 같은 곡선 위에서 이동 <span style="color:#8B84A3;font-size:23px;">(예: 커피 3,000→4,000원, 수요량 100→80잔)</span></span></div><div style="background:#FFFFFF;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);"><span style="font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:32px;color:#E85C7B;margin-right:16px;">수요의 변동</span><span style="font-size:29px;">가격 외 요인 변화 → 곡선 자체가 이동 <span style="color:#8B84A3;font-size:23px;">(예: 커피가 건강에 좋다는 연구결과 → 곡선이 오른쪽으로)</span></span></div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">1. 수요 함수(수요곡선)</div>
@@ -172,7 +181,7 @@
   <text x="34" y="260" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="15" fill="#8B84A3">O</text><line x1="75" y1="65" x2="260" y2="235" stroke="#FF8FAB" stroke-width="5" stroke-linecap="round" /><line x1="115" y1="45" x2="300" y2="215" stroke="#FF8FAB" stroke-width="5" stroke-linecap="round" stroke-dasharray="10,8"/></svg></div></div></div>
 </div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">1. 수요 함수(수요곡선)</div>
@@ -200,7 +209,7 @@
   <polygon points="218,140 209.71045105397403,143.50476508077784 209.71045105397403,136.49523491922216" fill="#2BAE87"/><circle cx="157" cy="140" r="6" fill="#FFE1E9" stroke="#FFFFFF" stroke-width="2"/><circle cx="218" cy="140" r="6" fill="#E85C7B" stroke="#FFFFFF" stroke-width="2"/><text x="58" y="60" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="18" font-weight="700" fill="#E85C7B" text-anchor="start">D₁</text><text x="304" y="224" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="18" font-weight="700" fill="#E85C7B" text-anchor="start">D₂</text><rect x="97.125" y="8" width="85.75" height="29" rx="14.5" fill="#FFFFFF" opacity="0.94"/><text x="140" y="32" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="15" font-weight="700" fill="#2BAE87" text-anchor="middle">수요 증가</text></svg></div></div></div>
 </div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">1. 수요 함수(수요곡선)</div>
@@ -226,7 +235,7 @@
   </div></div>
 </div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">1. 수요 함수(수요곡선)</div>
@@ -234,7 +243,7 @@
 <div style="display:inline-flex;align-items:center;gap:10px;background:#FFD873;color:#3A3550;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:29px;padding:12px 30px;border-radius:999px;margin-bottom:20px;">✏️ 함께하기 2</div>
 <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:20px;min-height:0;"><div style="background:#FFFFFF;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:29px;line-height:1.7;text-align:center;">빵 가격 P원에 대한 수요함수가 <br><b style="color:#E85C7B;">d(P) = -1/2 P + 2,500</b><br>소득이 늘어나 모든 가격에 대해 빵 수요량이 100개씩 늘어났다고 한다.</div><div style="background:#FFE1E9;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:27px;text-align:center;">소득이 증가한 후의 수요함수 d₂(P)를 구하시오.</div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">1. 수요 함수(수요곡선)</div>
@@ -242,12 +251,12 @@
 <div style="display:inline-flex;align-items:center;gap:10px;background:#FFD873;color:#3A3550;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:29px;padding:12px 30px;border-radius:999px;margin-bottom:20px;">✏️ 함께하기 2 · 정답</div>
 <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px;min-height:0;"><div style="background:#FFFFFF;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:27px;">수요량이 100개씩 늘어났으므로</div><div style="background:#FF8FAB;color:#FFFFFF;border-radius:20px;padding:26px 34px;text-align:center;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:44px;box-shadow:0 6px 18px rgba(0,0,0,.12);">d₂(P) = -1/2 P + 2,600</div><div style="background:#4FD9AE;color:#FFFFFF;border-radius:20px;padding:22px 30px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:34px;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.1);">답 &nbsp; d₂(P) = -1/2 P + 2,600</div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#4FBEE8;border-radius:36px;box-sizing:border-box;padding:58px 70px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#FFFFFF;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FFFFFF;opacity:.85;"></div>
 <div style="width:150px;height:150px;border-radius:50%;background:#FFFFFF;color:#2E93B8;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:69px;display:flex;align-items:center;justify-content:center;margin-bottom:30px;">02</div>
 <div style="font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:56px;">공급 함수</div>
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">2. 공급 함수(공급곡선)</div>
@@ -256,7 +265,7 @@
 <div style="font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:56px;color:#3A3550;margin:0 0 16px 0;line-height:1.25;">공급함수란?</div>
 <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px;min-height:0;"><div style="background:#FFFFFF;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);"><div style="font-size:34px;line-height:1.6;">가격 <b style="color:#2E93B8;">P</b> <b>(독립변수)</b> → 공급량 <b style="color:#2E93B8;">Q</b> <b>(종속변수)</b></div></div><div style="display:flex;align-items:stretch;gap:2px;"><div style="background:#DFF4FC;color:#2E93B8;border-radius:18px;padding:16px 20px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:23px;text-align:center;flex:1;">가격 ↑ 상승</div><div style="display:flex;align-items:center;color:#8B84A3;font-size:32px;padding:0 4px;">&#8594;</div><div style="background:#4FBEE8;color:#FFFFFF;border-radius:18px;padding:16px 20px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:23px;text-align:center;flex:1;">공급량 ↑ 증가</div></div><div style="background:#FFD873;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:24px;color:#3A3550;">💡 기업의 목표는 이윤 극대화! 가격이 오르면 더 많이 팔고 싶어져요.</div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">2. 공급 함수(공급곡선)</div>
@@ -272,7 +281,7 @@
   <text x="339" y="266" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="20" fill="#3A3550">Q</text>
   <text x="34" y="260" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="15" fill="#8B84A3">O</text><line x1="75" y1="215" x2="300" y2="45" stroke="#4FBEE8" stroke-width="5" stroke-linecap="round" /><text x="215" y="90" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="22" font-weight="700" fill="#2E93B8" text-anchor="start">Q = s(P)</text></svg></div></div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">2. 공급 함수(공급곡선)</div>
@@ -284,7 +293,7 @@
   <div style="background:#DFF4FC;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);flex:1;font-size:24px;"><b style="color:#2E93B8;">[3]</b> 가격이 1,600원일 때 공급량을 구하시오.</div>
   </div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">2. 공급 함수(공급곡선)</div>
@@ -292,7 +301,7 @@
 <div style="display:inline-flex;align-items:center;gap:10px;background:#FFD873;color:#3A3550;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:29px;padding:12px 30px;border-radius:999px;margin-bottom:20px;">✏️ 함께하기 3 · 정답</div>
 <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:12px;min-height:0;"><div style="background:#FFFFFF;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:27px;">[1] 가격 1,200원일 때 공급량은 <b style="color:#2E93B8;">1,250개</b>, 1,300원일 때는 <b style="color:#2E93B8;">1,300개</b></div><div style="background:#FFFFFF;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:27px;">[2] 연립방정식을 풀면 a = <b style="color:#2E93B8;">1/2</b>, b = <b style="color:#2E93B8;">650</b></div><div style="background:#FFFFFF;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:27px;">[3] s(1600) = 1/2×1,600+650 = <b style="color:#2E93B8;">1,450개</b></div><div style="background:#4FD9AE;color:#FFFFFF;border-radius:20px;padding:22px 30px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:34px;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.1);">답 &nbsp; [1] 1,250개, 1,300개 &nbsp; [2] a=1/2, b=650 &nbsp; [3] 1,450개</div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">2. 공급 함수(공급곡선)</div>
@@ -301,7 +310,7 @@
 <div style="font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:46px;color:#3A3550;margin:0 0 16px 0;line-height:1.25;">공급량의 변동 vs 공급의 변동</div>
 <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px;min-height:0;"><div style="background:#FFFFFF;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);"><span style="font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:32px;color:#2E93B8;margin-right:16px;">공급량의 변동</span><span style="font-size:29px;">가격 변화 → 같은 곡선 위에서 이동</span></div><div style="background:#FFFFFF;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);"><span style="font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:32px;color:#2E93B8;margin-right:16px;">공급의 변동</span><span style="font-size:29px;">가격 외 요인 변화 → 곡선 자체가 이동 <span style="color:#8B84A3;font-size:23px;">(원인: 원자재 가격, 기술 발전, 공급자 수)</span></span></div><div style="display:flex;gap:16px;"><span style="display:inline-block;background:#DFF4FC;color:#2E93B8;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:24px;padding:8px 24px;border-radius:999px;">🌾 밀가루↑ → 빵 공급↓</span><span style="display:inline-block;background:#DFF4FC;color:#2E93B8;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:24px;padding:8px 24px;border-radius:999px;">⚙️ 기술발전 → 공급↑</span><span style="display:inline-block;background:#DFF4FC;color:#2E93B8;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:24px;padding:8px 24px;border-radius:999px;">🏪 가게수↑ → 공급↑</span></div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">2. 공급 함수(공급곡선)</div>
@@ -327,7 +336,7 @@
   <text x="34" y="260" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="15" fill="#8B84A3">O</text><line x1="75" y1="235" x2="260" y2="65" stroke="#4FBEE8" stroke-width="5" stroke-linecap="round" /><line x1="150" y1="235" x2="335" y2="65" stroke="#4FBEE8" stroke-width="5" stroke-linecap="round" stroke-dasharray="10,8"/></svg></div></div></div>
 </div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">2. 공급 함수(공급곡선)</div>
@@ -355,7 +364,7 @@
   <polygon points="253,140 244.71045105397403,143.50476508077784 244.71045105397403,136.49523491922216" fill="#2BAE87"/><circle cx="178" cy="140" r="6" fill="#DFF4FC" stroke="#FFFFFF" stroke-width="2"/><circle cx="253" cy="140" r="6" fill="#2E93B8" stroke="#FFFFFF" stroke-width="2"/><text x="58" y="252" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="18" font-weight="700" fill="#2E93B8" text-anchor="start">S₁</text><text x="305" y="55" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="18" font-weight="700" fill="#2E93B8" text-anchor="start">S₂</text><rect x="222.125" y="171" width="85.75" height="29" rx="14.5" fill="#FFFFFF" opacity="0.94"/><text x="265" y="195" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="15" font-weight="700" fill="#2BAE87" text-anchor="middle">공급 증가</text></svg></div></div></div>
 </div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">2. 공급 함수(공급곡선)</div>
@@ -363,7 +372,7 @@
 <div style="display:inline-flex;align-items:center;gap:10px;background:#FFD873;color:#3A3550;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:29px;padding:12px 30px;border-radius:999px;margin-bottom:20px;">✏️ 함께하기 4</div>
 <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:20px;min-height:0;"><div style="background:#FFFFFF;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:29px;line-height:1.7;text-align:center;">자동차 1대의 가격 P원에 대한 공급함수가 <br><b style="color:#2E93B8;">s₁(P) = P - 1,200</b><br>기술 혁신으로 생산비가 절감되어 모든 가격에 대해 공급량이 300대씩 늘어났다.</div><div style="background:#DFF4FC;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:27px;text-align:center;">기술 혁신 이후의 공급함수 s₂(P)를 구하시오.</div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">2. 공급 함수(공급곡선)</div>
@@ -371,12 +380,12 @@
 <div style="display:inline-flex;align-items:center;gap:10px;background:#FFD873;color:#3A3550;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:29px;padding:12px 30px;border-radius:999px;margin-bottom:20px;">✏️ 함께하기 4 · 정답</div>
 <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px;min-height:0;"><div style="background:#FFFFFF;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:27px;">공급량이 300대씩 늘어났으므로</div><div style="background:#4FBEE8;color:#FFFFFF;border-radius:20px;padding:26px 34px;text-align:center;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:44px;box-shadow:0 6px 18px rgba(0,0,0,.12);">s₂(P) = P - 900</div><div style="background:#4FD9AE;color:#FFFFFF;border-radius:20px;padding:22px 30px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:34px;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.1);">답 &nbsp; s₂(P) = P - 900</div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#4FD9AE;border-radius:36px;box-sizing:border-box;padding:58px 70px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#FFFFFF;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FFFFFF;opacity:.85;"></div>
 <div style="width:150px;height:150px;border-radius:50%;background:#FFFFFF;color:#2BAE87;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:69px;display:flex;align-items:center;justify-content:center;margin-bottom:30px;">03</div>
 <div style="font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:56px;">균형가격의 결정</div>
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">3. 균형가격의 결정</div>
@@ -388,7 +397,7 @@
   <div style="background:#DFFBF0;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);flex:1;"><div style="font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:27px;color:#2BAE87;">균형거래량</div><div style="font-size:24px;margin-top:6px;">균형이 이루어졌을 때의 거래량</div></div>
   </div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">3. 균형가격의 결정</div>
@@ -404,7 +413,7 @@
   <text x="339" y="266" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="20" fill="#3A3550">Q</text>
   <text x="34" y="260" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="15" fill="#8B84A3">O</text><line x1="75" y1="45" x2="300" y2="215" stroke="#FF8FAB" stroke-width="5" stroke-linecap="round" /><line x1="75" y1="215" x2="300" y2="45" stroke="#4FBEE8" stroke-width="5" stroke-linecap="round" /><text x="307" y="227" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="23" font-weight="700" fill="#E85C7B" text-anchor="start">D</text><text x="307" y="38" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="23" font-weight="700" fill="#2E93B8" text-anchor="start">S</text></svg></div></div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">3. 균형가격의 결정</div>
@@ -412,7 +421,7 @@
 <div style="display:inline-flex;align-items:center;gap:10px;background:#FFD873;color:#3A3550;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:29px;padding:12px 30px;border-radius:999px;margin-bottom:20px;">✏️ 함께하기 1</div>
 <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:20px;min-height:0;"><div style="background:#FFFFFF;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:29px;text-align:center;line-height:1.7;">가을배추 1포기의 가격 P원에 대한<br>수요함수 d(P) = -3/2 P + 5,000, 공급함수 s(P) = 1/10 P + 200</div><div style="background:#DFFBF0;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:27px;text-align:center;">균형가격과 균형거래량을 각각 구하시오.</div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">3. 균형가격의 결정</div>
@@ -420,7 +429,7 @@
 <div style="display:inline-flex;align-items:center;gap:10px;background:#FFD873;color:#3A3550;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:29px;padding:12px 30px;border-radius:999px;margin-bottom:20px;">✏️ 함께하기 1 · 정답</div>
 <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px;min-height:0;"><div style="background:#FFFFFF;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:27px;">d(P) = s(P) 을 푸면 P = <b style="color:#2BAE87;">3,000원</b></div><div style="background:#FFFFFF;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:27px;">균형거래량 = d(3,000) = <b style="color:#2BAE87;">500포기</b></div><div style="background:#4FD9AE;color:#FFFFFF;border-radius:20px;padding:22px 30px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:34px;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.1);">답 &nbsp; 균형가격 3,000원, 균형거래량 500포기</div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">3. 균형가격의 결정</div>
@@ -429,7 +438,7 @@
 <div style="font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:46px;color:#3A3550;margin:0 0 16px 0;line-height:1.25;">초과수요</div>
 <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:26px;min-height:0;"><div style="background:#FFE1E9;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);padding:36px 40px;"><div style="text-align:center;font-size:60px;line-height:1;margin-bottom:10px;">🙋🙋‍♀️🙋‍♂️</div><div style="font-size:32px;text-align:center;">가격이 <b style="color:#E85C7B;">균형가격보다 낮으면</b><br>사려는 사람이 파는 사람보다 많아져요!</div></div><div style="display:flex;align-items:stretch;gap:2px;"><div style="background:#FFE1E9;color:#E85C7B;border-radius:18px;padding:16px 20px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:23px;text-align:center;flex:1;">가격<균형가격</div><div style="display:flex;align-items:center;color:#8B84A3;font-size:32px;padding:0 4px;">&#8594;</div><div style="background:#FF8FAB;color:#FFFFFF;border-radius:18px;padding:16px 20px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:23px;text-align:center;flex:1;">수요량>공급량</div><div style="display:flex;align-items:center;color:#8B84A3;font-size:32px;padding:0 4px;">&#8594;</div><div style="background:#FFE1E9;color:#E85C7B;border-radius:18px;padding:16px 20px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:23px;text-align:center;flex:1;">가격 상승</div><div style="display:flex;align-items:center;color:#8B84A3;font-size:32px;padding:0 4px;">&#8594;</div><div style="background:#4FD9AE;color:#FFFFFF;border-radius:18px;padding:16px 20px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:23px;text-align:center;flex:1;">균형점 도달</div></div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">3. 균형가격의 결정</div>
@@ -450,7 +459,7 @@
 <div style="flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;"><div style="background:#FFD873;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:23px;line-height:1.7;display:flex;flex-direction:column;justify-content:center;">⛺ 신상 캔핑의자 처음 30,000원<br>↓ SNS 입소문<br>사려는 사람 폭증 → 초과수요<br>↓<br>가격 인상 → 균형가격(50,000원) 도달</div></div>
 </div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">3. 균형가격의 결정</div>
@@ -459,7 +468,7 @@
 <div style="font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:46px;color:#3A3550;margin:0 0 16px 0;line-height:1.25;">초과공급</div>
 <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:26px;min-height:0;"><div style="background:#DFF4FC;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);padding:36px 40px;"><div style="text-align:center;font-size:60px;line-height:1;margin-bottom:10px;">📦📦📦</div><div style="font-size:32px;text-align:center;">가격이 <b style="color:#2E93B8;">균형가격보다 높으면</b><br>팔려는 사람이 사려는 사람보다 많아져요!</div></div><div style="display:flex;align-items:stretch;gap:2px;"><div style="background:#DFF4FC;color:#2E93B8;border-radius:18px;padding:16px 20px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:23px;text-align:center;flex:1;">가격>균형가격</div><div style="display:flex;align-items:center;color:#8B84A3;font-size:32px;padding:0 4px;">&#8594;</div><div style="background:#4FBEE8;color:#FFFFFF;border-radius:18px;padding:16px 20px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:23px;text-align:center;flex:1;">공급량>수요량</div><div style="display:flex;align-items:center;color:#8B84A3;font-size:32px;padding:0 4px;">&#8594;</div><div style="background:#DFF4FC;color:#2E93B8;border-radius:18px;padding:16px 20px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:23px;text-align:center;flex:1;">가격 하락</div><div style="display:flex;align-items:center;color:#8B84A3;font-size:32px;padding:0 4px;">&#8594;</div><div style="background:#4FD9AE;color:#FFFFFF;border-radius:18px;padding:16px 20px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:23px;text-align:center;flex:1;">균형점 도달</div></div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">3. 균형가격의 결정</div>
@@ -480,7 +489,7 @@
 <div style="flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;"><div style="background:#FFD873;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:23px;line-height:1.7;display:flex;flex-direction:column;justify-content:center;">😷 마스크 여전히 1,500원(균형가격 1,000원)<br>↓ 재고 산더미 → 초과공급<br>↓<br>가격 인하 → 균형가격(1,000원) 도달</div></div>
 </div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">3. 균형가격의 결정</div>
@@ -491,7 +500,7 @@
   <div style="background:#DFFBF0;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);flex:1;font-size:24px;"><b style="color:#2BAE87;">[2]</b> 가격이 3,600원일 때, 앞으로 가격이 어떻게 변할지 말하시오.</div>
   </div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">3. 균형가격의 결정</div>
@@ -499,7 +508,7 @@
 <div style="display:inline-flex;align-items:center;gap:10px;background:#FFD873;color:#3A3550;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:29px;padding:12px 30px;border-radius:999px;margin-bottom:20px;">✏️ 함께하기 2 · 정답</div>
 <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px;min-height:0;"><div style="background:#FFFFFF;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:27px;">d(3,600)=400, s(3,600)=1,020 → 초과공급량 = <b style="color:#2BAE87;">620</b></div><div style="background:#FFFFFF;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:27px;">공급량>수요량이므로 가격은 균형가격에 도달할 때까지 <b style="color:#2BAE87;">하락</b>할 것</div><div style="background:#4FD9AE;color:#FFFFFF;border-radius:20px;padding:22px 30px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:34px;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.1);">답 &nbsp; [1] 초과공급량 620 &nbsp; [2] 가격은 하락할 것</div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">3. 균형가격의 결정</div>
@@ -518,7 +527,7 @@
 <div style="flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;"><div style="background:#EEE7FC;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:23px;line-height:1.7;display:flex;flex-direction:column;justify-content:center;">수요량의 최대값 Q₀보다 공급량의 최소값 Q₁이 크면<br>→ 희소성이 없어 균형가격이 형성되지 않음 (가격 = 0원)<br><br>🌬 예시: 공기<br>대기오염으로 공급이 줄어들면 S₁처럼 왼쪽으로 이동→균형가격 형성 가능</div></div>
 </div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">3. 균형가격의 결정</div>
@@ -537,12 +546,12 @@
 <div style="flex:1;min-width:0;min-height:0;display:flex;flex-direction:column;"><div style="background:#EEE7FC;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:23px;line-height:1.7;display:flex;flex-direction:column;justify-content:center;">수요곡선의 최고가격 P₁이 공급곡선의 최저가격 P₂보다 낮으면<br>→ 상품이 거래될 수 없어 균형가격이 형성되지 않음<br><br>🚀 예시: 우주여행<br>실행은 가능하나 지불할 수요자가 없어 균형가격 미형성. 기술 혁신으로 공급곡선이 이동하면 형성될 수도</div></div>
 </div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#B79CED;border-radius:36px;box-sizing:border-box;padding:58px 70px;display:flex;flex-direction:column;align-items:flex-start;justify-content:center;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#FFFFFF;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FFFFFF;opacity:.85;"></div>
 <div style="width:150px;height:150px;border-radius:50%;background:#FFFFFF;color:#7856C9;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:69px;display:flex;align-items:center;justify-content:center;margin-bottom:30px;">04</div>
 <div style="font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:56px;">균형가격의 변화</div>
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">4. 균형가격의 변화</div>
@@ -551,7 +560,7 @@
 <div style="font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:56px;color:#3A3550;margin:0 0 16px 0;line-height:1.25;">세금이 붙으면?</div>
 <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:18px;min-height:0;"><div style="background:#FFD873;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:29px;text-align:center;">💸 세금 = 비용 증가 → 생산자는 생산을 줄이고 싶어해요 → 공급량 감소</div><div style="display:flex;align-items:stretch;gap:2px;"><div style="background:#DFF4FC;color:#2E93B8;border-radius:18px;padding:16px 20px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:23px;text-align:center;flex:1;">세금 증가</div><div style="display:flex;align-items:center;color:#8B84A3;font-size:32px;padding:0 4px;">&#8594;</div><div style="background:#4FBEE8;color:#FFFFFF;border-radius:18px;padding:16px 20px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:23px;text-align:center;flex:1;">공급곡선 왼쪽 이동</div><div style="display:flex;align-items:center;color:#8B84A3;font-size:32px;padding:0 4px;">&#8594;</div><div style="background:#4FD9AE;color:#FFFFFF;border-radius:18px;padding:16px 20px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:23px;text-align:center;flex:1;">균형가격 ↑, 균형거래량 ↓</div></div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">4. 균형가격의 변화</div>
@@ -567,7 +576,7 @@
   <text x="339" y="266" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="20" fill="#3A3550">Q</text>
   <text x="34" y="260" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="15" fill="#8B84A3">O</text><line x1="75" y1="45" x2="300" y2="215" stroke="#FF8FAB" stroke-width="5" stroke-linecap="round" /><line x1="75" y1="215" x2="300" y2="45" stroke="#4FBEE8" stroke-width="5" stroke-linecap="round" /><text x="307" y="227" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="23" font-weight="700" fill="#E85C7B" text-anchor="start">D</text><text x="307" y="38" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="23" font-weight="700" fill="#2E93B8" text-anchor="start">S</text></svg></div></div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">4. 균형가격의 변화</div>
@@ -584,7 +593,7 @@
   <text x="34" y="260" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="15" fill="#8B84A3">O</text><line x1="75" y1="45" x2="300" y2="215" stroke="#FF8FAB" stroke-width="5" stroke-linecap="round" /><line x1="115" y1="215" x2="300" y2="45" stroke="#DFF4FC" stroke-width="5" stroke-linecap="round" /><line x1="75" y1="215" x2="260" y2="45" stroke="#4FBEE8" stroke-width="5" stroke-linecap="round" /><line x1="50" y1="138" x2="198" y2="138" stroke="#8B84A3" stroke-width="2" stroke-dasharray="5,5"/><line x1="50" y1="122" x2="177" y2="122" stroke="#8B84A3" stroke-width="2" stroke-dasharray="5,5"/><line x1="198" y1="138" x2="177" y2="122" stroke="#2BAE87" stroke-width="4" stroke-linecap="round"/>
   <polygon points="177,122 185.71780927472662,124.23602357981542 181.46973107813542,129.81162621284136" fill="#2BAE87"/><circle cx="198" cy="138" r="6" fill="#2BAE87" stroke="#FFFFFF" stroke-width="2"/><circle cx="177" cy="122" r="6" fill="#2BAE87" stroke="#FFFFFF" stroke-width="2"/><text x="24" y="142" font-family="'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="15" font-weight="400" fill="#8B84A3" text-anchor="start">P₀</text><text x="24" y="126" font-family="'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="15" font-weight="400" fill="#8B84A3" text-anchor="start">P₁</text><text x="304" y="224" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="17" font-weight="700" fill="#E85C7B" text-anchor="start">D</text><text x="252" y="84" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="16" font-weight="700" fill="#2E93B8" text-anchor="start">S₁</text><text x="160" y="92" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="16" font-weight="700" fill="#2E93B8" text-anchor="start">S₂</text><rect x="61.900000000000006" y="235" width="236.2" height="28" rx="14" fill="#FFFFFF" opacity="0.94"/><text x="180" y="258" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" font-weight="700" fill="#2E93B8" text-anchor="middle">세금 증가 → 공급곡선 왼쪽 이동</text></svg></div></div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">4. 균형가격의 변화</div>
@@ -593,7 +602,7 @@
 <div style="font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:46px;color:#3A3550;margin:0 0 16px 0;line-height:1.25;">세금 변화와 균형</div>
 <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:18px;min-height:0;"><table style="width:100%;border-collapse:collapse;border-radius:16px;overflow:hidden;box-shadow:0 6px 18px rgba(150,120,140,.14);"><tr><th style="background:#2E93B8;color:#FFFFFF;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:24px;font-weight:400;padding:14px 10px;">변화</th><th style="background:#2E93B8;color:#FFFFFF;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:24px;font-weight:400;padding:14px 10px;">공급곡선</th><th style="background:#2E93B8;color:#FFFFFF;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:24px;font-weight:400;padding:14px 10px;">균형가격</th><th style="background:#2E93B8;color:#FFFFFF;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:24px;font-weight:400;padding:14px 10px;">균형거래량</th></tr><tr><td style="font-size:26px;font-weight:600;text-align:center;padding:13px 10px;background:#FFFFFF;color:#3A3550;">세금 증가</td><td style="font-size:26px;font-weight:600;text-align:center;padding:13px 10px;background:#FFFFFF;color:#3A3550;">왼쪽 이동</td><td style="font-size:26px;font-weight:600;text-align:center;padding:13px 10px;background:#FFFFFF;color:#3A3550;">상승</td><td style="font-size:26px;font-weight:600;text-align:center;padding:13px 10px;background:#FFFFFF;color:#3A3550;">감소</td></tr><tr><td style="font-size:26px;font-weight:600;text-align:center;padding:13px 10px;background:#FFE1E9;color:#3A3550;">세금 감소</td><td style="font-size:26px;font-weight:600;text-align:center;padding:13px 10px;background:#FFE1E9;color:#3A3550;">오른쪽 이동</td><td style="font-size:26px;font-weight:600;text-align:center;padding:13px 10px;background:#FFE1E9;color:#3A3550;">하락</td><td style="font-size:26px;font-weight:600;text-align:center;padding:13px 10px;background:#FFE1E9;color:#3A3550;">증가</td></tr></table></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">4. 균형가격의 변화</div>
@@ -601,7 +610,7 @@
 <div style="display:inline-flex;align-items:center;gap:10px;background:#FFD873;color:#3A3550;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:29px;padding:12px 30px;border-radius:999px;margin-bottom:20px;">✏️ 함께하기 1</div>
 <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:18px;min-height:0;"><div style="background:#FFFFFF;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:26px;line-height:1.7;text-align:center;">에너지음료 가격 P원에 대한 수요함수 d(P)=-1/3P+1,500으로 일정하고, 공급함수는 s₁(P)=2P-600이다. 정부가 생산자에게 세금을 부과하여 공급함수가 s₂(P)=2P-740이 되었다.</div><div style="background:#DFF4FC;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:24px;text-align:center;">세금 부과 전과 후의 균형가격과 균형거래량의 변화를 설명하시오.</div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">4. 균형가격의 변화</div>
@@ -609,7 +618,7 @@
 <div style="display:inline-flex;align-items:center;gap:10px;background:#FFD873;color:#3A3550;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:29px;padding:12px 30px;border-radius:999px;margin-bottom:20px;">✏️ 함께하기 1 · 정답</div>
 <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px;min-height:0;"><div style="background:#FFFFFF;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:26px;">부과 전: P₁ = <b style="color:#2E93B8;">900원</b>, 거래량 <b style="color:#2E93B8;">1,200개</b></div><div style="background:#FFFFFF;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:26px;">부과 후: P₂ = <b style="color:#2E93B8;">960원</b>, 거래량 <b style="color:#2E93B8;">1,180개</b></div><div style="background:#4FD9AE;color:#FFFFFF;border-radius:20px;padding:22px 30px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:34px;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.1);">답 &nbsp; 균형가격 60원 상승, 균형거래량 20개 감소</div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">4. 균형가격의 변화</div>
@@ -618,7 +627,7 @@
 <div style="font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:56px;color:#3A3550;margin:0 0 16px 0;line-height:1.25;">소득이 늘어나면?</div>
 <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:18px;min-height:0;"><div style="background:#FFD873;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:29px;text-align:center;">💰 소득 증가 → 소비 늘리고 싶어짐 → 새로운 수요 → 수요량 증가</div><div style="display:flex;align-items:stretch;gap:2px;"><div style="background:#FFE1E9;color:#E85C7B;border-radius:18px;padding:16px 20px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:23px;text-align:center;flex:1;">소득 증가</div><div style="display:flex;align-items:center;color:#8B84A3;font-size:32px;padding:0 4px;">&#8594;</div><div style="background:#FF8FAB;color:#FFFFFF;border-radius:18px;padding:16px 20px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:23px;text-align:center;flex:1;">수요곡선 오른쪽 이동</div><div style="display:flex;align-items:center;color:#8B84A3;font-size:32px;padding:0 4px;">&#8594;</div><div style="background:#4FD9AE;color:#FFFFFF;border-radius:18px;padding:16px 20px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:23px;text-align:center;flex:1;">균형가격 ↑, 균형거래량 ↑</div></div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">4. 균형가격의 변화</div>
@@ -634,7 +643,7 @@
   <text x="339" y="266" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="20" fill="#3A3550">Q</text>
   <text x="34" y="260" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="15" fill="#8B84A3">O</text><line x1="75" y1="45" x2="300" y2="215" stroke="#FF8FAB" stroke-width="5" stroke-linecap="round" /><line x1="75" y1="215" x2="300" y2="45" stroke="#4FBEE8" stroke-width="5" stroke-linecap="round" /><text x="307" y="227" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="23" font-weight="700" fill="#E85C7B" text-anchor="start">D</text><text x="307" y="38" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="23" font-weight="700" fill="#2E93B8" text-anchor="start">S</text></svg></div></div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">4. 균형가격의 변화</div>
@@ -651,7 +660,7 @@
   <text x="34" y="260" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="15" fill="#8B84A3">O</text><line x1="75" y1="215" x2="300" y2="45" stroke="#4FBEE8" stroke-width="5" stroke-linecap="round" /><line x1="75" y1="65" x2="260" y2="235" stroke="#FFE1E9" stroke-width="5" stroke-linecap="round" /><line x1="115" y1="45" x2="300" y2="215" stroke="#FF8FAB" stroke-width="5" stroke-linecap="round" /><line x1="50" y1="140" x2="157" y2="140" stroke="#8B84A3" stroke-width="2" stroke-dasharray="5,5"/><line x1="50" y1="112" x2="188" y2="112" stroke="#8B84A3" stroke-width="2" stroke-dasharray="5,5"/><line x1="157" y1="140" x2="188" y2="112" stroke="#2BAE87" stroke-width="4" stroke-linecap="round"/>
   <polygon points="188,112 184.19749969099342,120.15726617194785 179.499107948885,114.95547531461355" fill="#2BAE87"/><circle cx="157" cy="140" r="6" fill="#2BAE87" stroke="#FFFFFF" stroke-width="2"/><circle cx="188" cy="112" r="6" fill="#2BAE87" stroke="#FFFFFF" stroke-width="2"/><text x="24" y="144" font-family="'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="15" font-weight="400" fill="#8B84A3" text-anchor="start">P₀</text><text x="24" y="116" font-family="'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="15" font-weight="400" fill="#8B84A3" text-anchor="start">P₁</text><text x="304" y="38" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="17" font-weight="700" fill="#2E93B8" text-anchor="start">S</text><text x="58" y="58" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="16" font-weight="700" fill="#E85C7B" text-anchor="start">D₁</text><text x="304" y="224" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="16" font-weight="700" fill="#E85C7B" text-anchor="start">D₂</text><rect x="55.95" y="235" width="248.1" height="28" rx="14" fill="#FFFFFF" opacity="0.94"/><text x="180" y="258" font-family="'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif" font-size="14" font-weight="700" fill="#E85C7B" text-anchor="middle">소득 증가 → 수요곡선 오른쪽 이동</text></svg></div></div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">4. 균형가격의 변화</div>
@@ -660,7 +669,7 @@
 <div style="font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:46px;color:#3A3550;margin:0 0 16px 0;line-height:1.25;">소득 변화와 균형</div>
 <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:18px;min-height:0;"><table style="width:100%;border-collapse:collapse;border-radius:16px;overflow:hidden;box-shadow:0 6px 18px rgba(150,120,140,.14);"><tr><th style="background:#E85C7B;color:#FFFFFF;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:24px;font-weight:400;padding:14px 10px;">변화</th><th style="background:#E85C7B;color:#FFFFFF;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:24px;font-weight:400;padding:14px 10px;">수요곡선</th><th style="background:#E85C7B;color:#FFFFFF;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:24px;font-weight:400;padding:14px 10px;">균형가격</th><th style="background:#E85C7B;color:#FFFFFF;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:24px;font-weight:400;padding:14px 10px;">균형거래량</th></tr><tr><td style="font-size:26px;font-weight:600;text-align:center;padding:13px 10px;background:#FFFFFF;color:#3A3550;">소득 증가</td><td style="font-size:26px;font-weight:600;text-align:center;padding:13px 10px;background:#FFFFFF;color:#3A3550;">오른쪽 이동</td><td style="font-size:26px;font-weight:600;text-align:center;padding:13px 10px;background:#FFFFFF;color:#3A3550;">상승</td><td style="font-size:26px;font-weight:600;text-align:center;padding:13px 10px;background:#FFFFFF;color:#3A3550;">증가</td></tr><tr><td style="font-size:26px;font-weight:600;text-align:center;padding:13px 10px;background:#FFE1E9;color:#3A3550;">소득 감소</td><td style="font-size:26px;font-weight:600;text-align:center;padding:13px 10px;background:#FFE1E9;color:#3A3550;">왼쪽 이동</td><td style="font-size:26px;font-weight:600;text-align:center;padding:13px 10px;background:#FFE1E9;color:#3A3550;">하락</td><td style="font-size:26px;font-weight:600;text-align:center;padding:13px 10px;background:#FFE1E9;color:#3A3550;">감소</td></tr></table></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">4. 균형가격의 변화</div>
@@ -668,7 +677,7 @@
 <div style="display:inline-flex;align-items:center;gap:10px;background:#FFD873;color:#3A3550;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:29px;padding:12px 30px;border-radius:999px;margin-bottom:20px;">✏️ 함께하기 2</div>
 <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:18px;min-height:0;"><div style="background:#FFFFFF;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:24px;line-height:1.7;text-align:center;">SNS 이모티콘 가격 P원에 대한 수요함수 d₁(P)=-1/5P+1,720, 공급함수는 s(P)=3/10P+470로 일정하다. 소득의 증가로 수요함수가 d₂(P)=-1/5P+1,900이 되었다.</div><div style="background:#FFE1E9;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:24px;text-align:center;">소득 증가 전과 후의 균형가격과 균형거래량의 변화를 설명하시오.</div></div>
 
-</div></section>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
 <section class="slide"><div style="width:1280px;height:720px;background:#FFF8F3;border-radius:36px;box-sizing:border-box;padding:64px 52px 32px 52px;display:flex;flex-direction:column;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#3A3550;position:relative;overflow:hidden;">
 <div style="position:absolute;top:26px;right:30px;width:34px;height:34px;border-radius:50%;background:#FF8FAB;opacity:.85;"></div>
 <div style="position:absolute;top:22px;left:60px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:20px;color:#8B84A3;background:#FFFFFF;padding:4px 18px;border-radius:999px;box-shadow:0 2px 8px rgba(0,0,0,.06);">4. 균형가격의 변화</div>
@@ -676,26 +685,27 @@
 <div style="display:inline-flex;align-items:center;gap:10px;background:#FFD873;color:#3A3550;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:29px;padding:12px 30px;border-radius:999px;margin-bottom:20px;">✏️ 함께하기 2 · 정답</div>
 <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:14px;min-height:0;"><div style="background:#FFFFFF;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:26px;">증가 전: P₁ = <b style="color:#E85C7B;">2,500원</b>, 거래량 <b style="color:#E85C7B;">1,220개</b></div><div style="background:#FFFFFF;border-radius:24px;padding:26px 32px;box-shadow:0 6px 20px rgba(150,120,140,.14);font-size:26px;">증가 후: P₂ = <b style="color:#E85C7B;">2,860원</b>, 거래량 <b style="color:#E85C7B;">1,328개</b></div><div style="background:#4FD9AE;color:#FFFFFF;border-radius:20px;padding:22px 30px;font-family:'Jua','Malgun Gothic','Apple SD Gothic Neo',sans-serif;font-size:34px;text-align:center;box-shadow:0 6px 18px rgba(0,0,0,.1);">답 &nbsp; 균형가격 360원 상승, 균형거래량 108개 증가</div></div>
 
-</div></section>
-    <canvas id="drawCanvas" width="1280" height="720"></canvas>
+</div><canvas class="ink" width="2560" height="1440"></canvas></section>
+    <div class="edge" id="edgeL" style="position:absolute;left:0;top:0;width:28%;height:100%;z-index:30;cursor:pointer;"></div>
+    <div class="edge" id="edgeR" style="position:absolute;right:0;top:0;width:72%;height:100%;z-index:30;cursor:pointer;"></div>
   </div>
 </div>
 <div style="position:fixed;left:0;right:0;bottom:14px;display:flex;justify-content:center;align-items:center;gap:16px;z-index:50;">
   <div style="display:flex;align-items:center;gap:20px;background:rgba(255,255,255,.95);padding:8px 22px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.3);">
-    <button class="navbtn" id="prevBtn">←</button>
+    <button class="navbtn" id="prevBtn" title="이전 (←)">←</button>
     <div class="pageind" id="pageIndicator">1 / 50</div>
-    <button class="navbtn" id="nextBtn">→</button>
+    <button class="navbtn" id="nextBtn" title="다음 (→)">→</button>
+    <button class="navbtn" id="penBtn" title="펜 켜기/끄기 (P)" style="font-size:18px;">✎</button>
   </div>
-  <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.95);padding:8px 16px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.3);">
-    <button class="toolbtn" id="penBtn" title="펜 (켜기/끄기)">✏️</button>
-    <button class="toolbtn" id="hlBtn" title="형광펜 (켜기/끄기)">🖍️</button>
-    <button class="toolbtn" id="eraserBtn" title="획 지우개 (켜기/끄기)">🧽</button>
-    <span class="colordot active" data-color="#3A3550" style="background:#3A3550;"></span>
-    <span class="colordot" data-color="#E85C7B" style="background:#E85C7B;"></span>
-    <span class="colordot" data-color="#2BAE87" style="background:#2BAE87;"></span>
-    <span class="colordot" data-color="#E8A93C" style="background:#E8A93C;"></span>
-    <button class="toolbtn" id="clearBtn" title="전체 지우기">🗑️</button>
-  </div>
+</div>
+<div class="pentools" id="pentools">
+  <button data-tool="pen" class="on">펜</button><button data-tool="hl">형광펜</button><button data-tool="er">지우개</button>
+  <span class="sep"></span>
+  <button class="clr on" data-c="#3A3550" style="background:#3A3550;" title="검정"></button><button class="clr" data-c="#E5484D" style="background:#E5484D;" title="빨강"></button><button class="clr" data-c="#2F6FDE" style="background:#2F6FDE;" title="파랑"></button><button class="clr" data-c="#2BAE87" style="background:#2BAE87;" title="초록"></button><button class="clr" data-c="#E8A93C" style="background:#E8A93C;" title="노랑"></button>
+  <span class="sep"></span>
+  <button class="sz" data-sz="3" title="가늘게"><i style="width:6px;height:6px;"></i></button><button class="sz on" data-sz="6" title="보통"><i style="width:11px;height:11px;"></i></button><button class="sz" data-sz="11" title="굵게"><i style="width:17px;height:17px;"></i></button>
+  <span class="sep"></span>
+  <button id="penUndo">되돌리기</button><button id="penClear">모두 지우기</button>
 </div>
 <script>
 (function(){
@@ -704,122 +714,67 @@
   var total = slides.length;
   var idx = 0;
 
-  var canvas = document.getElementById('drawCanvas');
-  var ctx = canvas.getContext('2d');
-  var activeTool = null; // 'pen' | 'highlight' | 'eraser' | null
-  var curColor = '#3A3550';
-  var strokes = [];
-  var currentStroke = null;
-  var erasing = false;
-  var ERASE_R = 16;
+  /* ===== 펜: 그리기 (슬라이드마다 따로 저장) ===== */
+  var tool = 'pen', color = '#3A3550', size = 6, drawing = null;
+  var inkStore = slides.map(function(){ return []; });
 
-  function clearCanvas(){ strokes = []; ctx.clearRect(0,0,canvas.width,canvas.height); }
-
-  function redraw(){
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-    strokes.forEach(function(s){
-      if (s.points.length < 2) return;
-      ctx.save();
-      ctx.globalAlpha = s.alpha;
-      ctx.strokeStyle = s.color;
-      ctx.lineWidth = s.width;
-      ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-      ctx.beginPath();
-      ctx.moveTo(s.points[0][0], s.points[0][1]);
-      for (var i = 1; i < s.points.length; i++) ctx.lineTo(s.points[i][0], s.points[i][1]);
-      ctx.stroke();
-      ctx.restore();
+  function paint(i){
+    var cv = slides[i].querySelector('.ink'), g = cv.getContext('2d');
+    g.clearRect(0, 0, cv.width, cv.height);
+    inkStore[i].forEach(function(st){
+      g.save(); g.lineCap = 'round'; g.lineJoin = 'round';
+      g.lineWidth = st.w * 2 * (st.t === 'hl' ? 4 : st.t === 'er' ? 5 : 1);
+      if (st.t === 'er'){ g.globalCompositeOperation = 'destination-out'; g.strokeStyle = '#000'; g.fillStyle = '#000'; }
+      else { g.strokeStyle = st.c; g.fillStyle = st.c; if (st.t === 'hl') g.globalAlpha = .38; }
+      var p = st.p;
+      if (p.length === 1){ g.beginPath(); g.arc(p[0][0]*2, p[0][1]*2, g.lineWidth/2, 0, 7); g.fill(); }
+      else {
+        g.beginPath(); g.moveTo(p[0][0]*2, p[0][1]*2);
+        for (var k = 1; k < p.length - 1; k++) g.quadraticCurveTo(p[k][0]*2, p[k][1]*2, (p[k][0]+p[k+1][0]), (p[k][1]+p[k+1][1]));
+        var l = p[p.length-1]; g.lineTo(l[0]*2, l[1]*2); g.stroke();
+      }
+      g.restore();
     });
   }
-
-  function setTool(tool){
-    activeTool = (activeTool === tool) ? null : tool;
-    canvas.style.pointerEvents = activeTool ? 'auto' : 'none';
-    document.getElementById('penBtn').classList.toggle('active', activeTool === 'pen');
-    document.getElementById('hlBtn').classList.toggle('active', activeTool === 'highlight');
-    document.getElementById('eraserBtn').classList.toggle('active', activeTool === 'eraser');
-  }
-
-  function toCanvasXY(e){
-    var rect = canvas.getBoundingClientRect();
-    var sx = canvas.width / rect.width, sy = canvas.height / rect.height;
-    return [(e.clientX - rect.left) * sx, (e.clientY - rect.top) * sy];
-  }
-
-  function distToSegment(p, a, b){
-    var dx = b[0]-a[0], dy = b[1]-a[1];
-    var lenSq = dx*dx + dy*dy;
-    if (lenSq === 0) return Math.hypot(p[0]-a[0], p[1]-a[1]);
-    var t = ((p[0]-a[0])*dx + (p[1]-a[1])*dy) / lenSq;
-    t = Math.max(0, Math.min(1, t));
-    return Math.hypot(p[0]-(a[0]+t*dx), p[1]-(a[1]+t*dy));
-  }
-  function strokeNear(s, p){
-    if (s.points.length === 1) return Math.hypot(s.points[0][0]-p[0], s.points[0][1]-p[1]) < ERASE_R;
-    for (var i = 1; i < s.points.length; i++){
-      if (distToSegment(p, s.points[i-1], s.points[i]) < ERASE_R) return true;
-    }
-    return false;
-  }
-  function eraseAt(p){
-    var before = strokes.length;
-    strokes = strokes.filter(function(s){ return !strokeNear(s, p); });
-    if (strokes.length !== before) redraw();
-  }
-
-  canvas.addEventListener('pointerdown', function(e){
-    if (!activeTool) return;
-    canvas.setPointerCapture(e.pointerId);
-    var p = toCanvasXY(e);
-    if (activeTool === 'eraser'){
-      erasing = true;
-      eraseAt(p);
-    } else {
-      currentStroke = {
-        points: [p],
-        color: curColor,
-        width: activeTool === 'highlight' ? 20 : 6,
-        alpha: activeTool === 'highlight' ? 0.35 : 1
-      };
-      strokes.push(currentStroke);
-      redraw();
-    }
-  });
-  canvas.addEventListener('pointermove', function(e){
-    if (!activeTool) return;
-    var p = toCanvasXY(e);
-    if (activeTool === 'eraser'){
-      if (erasing) eraseAt(p);
-    } else if (currentStroke){
-      currentStroke.points.push(p);
-      redraw();
-    }
-  });
-  function endStroke(){ currentStroke = null; erasing = false; }
-  canvas.addEventListener('pointerup', endStroke);
-  canvas.addEventListener('pointercancel', endStroke);
-  canvas.addEventListener('pointerleave', endStroke);
-
-  document.getElementById('penBtn').addEventListener('click', function(e){ e.stopPropagation(); setTool('pen'); });
-  document.getElementById('hlBtn').addEventListener('click', function(e){ e.stopPropagation(); setTool('highlight'); });
-  document.getElementById('eraserBtn').addEventListener('click', function(e){ e.stopPropagation(); setTool('eraser'); });
-  document.getElementById('clearBtn').addEventListener('click', function(e){
-    e.stopPropagation(); clearCanvas();
-  });
-  Array.prototype.slice.call(document.querySelectorAll('.colordot')).forEach(function(dot){
-    dot.addEventListener('click', function(e){
-      e.stopPropagation();
-      curColor = dot.getAttribute('data-color');
-      document.querySelectorAll('.colordot').forEach(function(d){ d.classList.remove('active'); });
-      dot.classList.add('active');
-      if (activeTool === null || activeTool === 'eraser') setTool('pen');
+  function attachInk(i){
+    var cv = slides[i].querySelector('.ink');
+    var pt = function(e){ var r = cv.getBoundingClientRect(); return [(e.clientX-r.left)/r.width*1280, (e.clientY-r.top)/r.height*720]; };
+    cv.addEventListener('pointerdown', function(e){
+      if (!document.body.classList.contains('pen')) return;
+      try { cv.setPointerCapture(e.pointerId); } catch(err){}
+      e.preventDefault();
+      drawing = { t: tool, c: color, w: size, p: [pt(e)] };
+      inkStore[i].push(drawing);
+      paint(i);
     });
-  });
+    cv.addEventListener('pointermove', function(e){ if (drawing){ drawing.p.push(pt(e)); paint(i); } });
+    ['pointerup','pointercancel'].forEach(function(ev){ cv.addEventListener(ev, function(){ drawing = null; }); });
+  }
+  slides.forEach(function(s,i){ attachInk(i); });
+
+  var pens = document.getElementById('pentools'), penBtn = document.getElementById('penBtn');
+  function setPen(on){ document.body.classList.toggle('pen', on); penBtn.classList.toggle('on', on); }
+  penBtn.addEventListener('click', function(e){ e.stopPropagation(); setPen(!document.body.classList.contains('pen')); });
+  pens.querySelectorAll('[data-tool]').forEach(function(b){ b.addEventListener('click', function(){
+    tool = b.dataset.tool;
+    pens.querySelectorAll('[data-tool]').forEach(function(x){ x.classList.toggle('on', x===b); });
+  }); });
+  pens.querySelectorAll('.clr').forEach(function(b){ b.addEventListener('click', function(){
+    color = b.dataset.c;
+    pens.querySelectorAll('.clr').forEach(function(x){ x.classList.toggle('on', x===b); });
+    if (tool === 'er') pens.querySelector('[data-tool="pen"]').click();
+  }); });
+  pens.querySelectorAll('.sz').forEach(function(b){ b.addEventListener('click', function(){
+    size = +b.dataset.sz;
+    pens.querySelectorAll('.sz').forEach(function(x){ x.classList.toggle('on', x===b); });
+  }); });
+  function undo(){ inkStore[idx].pop(); paint(idx); }
+  document.getElementById('penUndo').addEventListener('click', function(e){ e.stopPropagation(); undo(); });
+  document.getElementById('penClear').addEventListener('click', function(e){ e.stopPropagation(); inkStore[idx].length = 0; paint(idx); });
 
   function render(){
     slides.forEach(function(s,i){ s.classList.toggle('active', i===idx); });
     document.getElementById('pageIndicator').textContent = (idx+1) + ' / ' + total;
-    clearCanvas();
   }
   function go(d){ idx = Math.min(total-1, Math.max(0, idx+d)); render(); }
   function fit(){
@@ -828,20 +783,18 @@
   }
   window.addEventListener('resize', fit); fit();
   document.addEventListener('keydown', function(e){
+    if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
     if (e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){ go(1); e.preventDefault(); }
     else if (e.key==='ArrowLeft'||e.key==='PageUp'){ go(-1); e.preventDefault(); }
-    else if (e.key==='p'||e.key==='P'){ setTool('pen'); }
-    else if (e.key==='h'||e.key==='H'){ setTool('highlight'); }
-    else if (e.key==='e'||e.key==='E'){ setTool('eraser'); }
+    else if ((e.key==='p'||e.key==='P') && !e.ctrlKey && !e.metaKey){ setPen(!document.body.classList.contains('pen')); }
+    else if ((e.key==='h'||e.key==='H') && document.body.classList.contains('pen')){ pens.querySelector('[data-tool="hl"]').click(); }
+    else if ((e.key==='e'||e.key==='E') && document.body.classList.contains('pen')){ pens.querySelector('[data-tool="er"]').click(); }
+    else if ((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='z' && document.body.classList.contains('pen')){ undo(); e.preventDefault(); }
   });
   document.getElementById('nextBtn').addEventListener('click', function(e){ e.stopPropagation(); go(1); });
   document.getElementById('prevBtn').addEventListener('click', function(e){ e.stopPropagation(); go(-1); });
-  document.getElementById('viewport').addEventListener('click', function(e){
-    if (activeTool) return;
-    var rect = stage.getBoundingClientRect();
-    var x = e.clientX - rect.left;
-    if (x < rect.width*0.28){ go(-1); } else { go(1); }
-  });
+  document.getElementById('edgeL').addEventListener('click', function(){ go(-1); });
+  document.getElementById('edgeR').addEventListener('click', function(){ go(1); });
   render();
 })();
 </script>
