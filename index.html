@@ -687,12 +687,14 @@
     <button class="navbtn" id="nextBtn">→</button>
   </div>
   <div style="display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.95);padding:8px 16px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.3);">
-    <button class="toolbtn" id="penBtn" title="필기 모드">✏️</button>
+    <button class="toolbtn" id="penBtn" title="펜 (켜기/끄기)">✏️</button>
+    <button class="toolbtn" id="hlBtn" title="형광펜 (켜기/끄기)">🖍️</button>
+    <button class="toolbtn" id="eraserBtn" title="획 지우개 (켜기/끄기)">🧽</button>
     <span class="colordot active" data-color="#3A3550" style="background:#3A3550;"></span>
     <span class="colordot" data-color="#E85C7B" style="background:#E85C7B;"></span>
     <span class="colordot" data-color="#2BAE87" style="background:#2BAE87;"></span>
     <span class="colordot" data-color="#E8A93C" style="background:#E8A93C;"></span>
-    <button class="toolbtn" id="clearBtn" title="지우기">🧹</button>
+    <button class="toolbtn" id="clearBtn" title="전체 지우기">🗑️</button>
   </div>
 </div>
 <script>
@@ -704,47 +706,103 @@
 
   var canvas = document.getElementById('drawCanvas');
   var ctx = canvas.getContext('2d');
-  var drawMode = false;
-  var drawing = false;
+  var activeTool = null; // 'pen' | 'highlight' | 'eraser' | null
   var curColor = '#3A3550';
-  var lastX = 0, lastY = 0;
+  var strokes = [];
+  var currentStroke = null;
+  var erasing = false;
+  var ERASE_R = 16;
 
-  function clearCanvas(){ ctx.clearRect(0,0,canvas.width,canvas.height); }
+  function clearCanvas(){ strokes = []; ctx.clearRect(0,0,canvas.width,canvas.height); }
 
-  function setDrawMode(on){
-    drawMode = on;
-    canvas.style.pointerEvents = on ? 'auto' : 'none';
-    document.getElementById('penBtn').classList.toggle('active', on);
+  function redraw(){
+    ctx.clearRect(0,0,canvas.width,canvas.height);
+    strokes.forEach(function(s){
+      if (s.points.length < 2) return;
+      ctx.save();
+      ctx.globalAlpha = s.alpha;
+      ctx.strokeStyle = s.color;
+      ctx.lineWidth = s.width;
+      ctx.lineCap = 'round'; ctx.lineJoin = 'round';
+      ctx.beginPath();
+      ctx.moveTo(s.points[0][0], s.points[0][1]);
+      for (var i = 1; i < s.points.length; i++) ctx.lineTo(s.points[i][0], s.points[i][1]);
+      ctx.stroke();
+      ctx.restore();
+    });
+  }
+
+  function setTool(tool){
+    activeTool = (activeTool === tool) ? null : tool;
+    canvas.style.pointerEvents = activeTool ? 'auto' : 'none';
+    document.getElementById('penBtn').classList.toggle('active', activeTool === 'pen');
+    document.getElementById('hlBtn').classList.toggle('active', activeTool === 'highlight');
+    document.getElementById('eraserBtn').classList.toggle('active', activeTool === 'eraser');
   }
 
   function toCanvasXY(e){
     var rect = canvas.getBoundingClientRect();
     var sx = canvas.width / rect.width, sy = canvas.height / rect.height;
-    return { x: (e.clientX - rect.left) * sx, y: (e.clientY - rect.top) * sy };
+    return [(e.clientX - rect.left) * sx, (e.clientY - rect.top) * sy];
+  }
+
+  function distToSegment(p, a, b){
+    var dx = b[0]-a[0], dy = b[1]-a[1];
+    var lenSq = dx*dx + dy*dy;
+    if (lenSq === 0) return Math.hypot(p[0]-a[0], p[1]-a[1]);
+    var t = ((p[0]-a[0])*dx + (p[1]-a[1])*dy) / lenSq;
+    t = Math.max(0, Math.min(1, t));
+    return Math.hypot(p[0]-(a[0]+t*dx), p[1]-(a[1]+t*dy));
+  }
+  function strokeNear(s, p){
+    if (s.points.length === 1) return Math.hypot(s.points[0][0]-p[0], s.points[0][1]-p[1]) < ERASE_R;
+    for (var i = 1; i < s.points.length; i++){
+      if (distToSegment(p, s.points[i-1], s.points[i]) < ERASE_R) return true;
+    }
+    return false;
+  }
+  function eraseAt(p){
+    var before = strokes.length;
+    strokes = strokes.filter(function(s){ return !strokeNear(s, p); });
+    if (strokes.length !== before) redraw();
   }
 
   canvas.addEventListener('pointerdown', function(e){
-    if (!drawMode) return;
-    drawing = true;
+    if (!activeTool) return;
     canvas.setPointerCapture(e.pointerId);
-    var p = toCanvasXY(e); lastX = p.x; lastY = p.y;
-    ctx.beginPath(); ctx.arc(p.x, p.y, 3, 0, Math.PI*2); ctx.fillStyle = curColor; ctx.fill();
+    var p = toCanvasXY(e);
+    if (activeTool === 'eraser'){
+      erasing = true;
+      eraseAt(p);
+    } else {
+      currentStroke = {
+        points: [p],
+        color: curColor,
+        width: activeTool === 'highlight' ? 20 : 6,
+        alpha: activeTool === 'highlight' ? 0.35 : 1
+      };
+      strokes.push(currentStroke);
+      redraw();
+    }
   });
   canvas.addEventListener('pointermove', function(e){
-    if (!drawing) return;
+    if (!activeTool) return;
     var p = toCanvasXY(e);
-    ctx.strokeStyle = curColor; ctx.lineWidth = 6; ctx.lineCap = 'round'; ctx.lineJoin = 'round';
-    ctx.beginPath(); ctx.moveTo(lastX, lastY); ctx.lineTo(p.x, p.y); ctx.stroke();
-    lastX = p.x; lastY = p.y;
+    if (activeTool === 'eraser'){
+      if (erasing) eraseAt(p);
+    } else if (currentStroke){
+      currentStroke.points.push(p);
+      redraw();
+    }
   });
-  function endStroke(e){ drawing = false; }
+  function endStroke(){ currentStroke = null; erasing = false; }
   canvas.addEventListener('pointerup', endStroke);
   canvas.addEventListener('pointercancel', endStroke);
   canvas.addEventListener('pointerleave', endStroke);
 
-  document.getElementById('penBtn').addEventListener('click', function(e){
-    e.stopPropagation(); setDrawMode(!drawMode);
-  });
+  document.getElementById('penBtn').addEventListener('click', function(e){ e.stopPropagation(); setTool('pen'); });
+  document.getElementById('hlBtn').addEventListener('click', function(e){ e.stopPropagation(); setTool('highlight'); });
+  document.getElementById('eraserBtn').addEventListener('click', function(e){ e.stopPropagation(); setTool('eraser'); });
   document.getElementById('clearBtn').addEventListener('click', function(e){
     e.stopPropagation(); clearCanvas();
   });
@@ -754,7 +812,7 @@
       curColor = dot.getAttribute('data-color');
       document.querySelectorAll('.colordot').forEach(function(d){ d.classList.remove('active'); });
       dot.classList.add('active');
-      if (!drawMode) setDrawMode(true);
+      if (activeTool === null || activeTool === 'eraser') setTool('pen');
     });
   });
 
@@ -770,15 +828,16 @@
   }
   window.addEventListener('resize', fit); fit();
   document.addEventListener('keydown', function(e){
-    if (drawMode && (e.key==='ArrowRight'||e.key==='ArrowLeft'||e.key===' ')) { /* allow nav keys even in draw mode */ }
     if (e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){ go(1); e.preventDefault(); }
     else if (e.key==='ArrowLeft'||e.key==='PageUp'){ go(-1); e.preventDefault(); }
-    else if (e.key==='p'||e.key==='P'){ setDrawMode(!drawMode); }
+    else if (e.key==='p'||e.key==='P'){ setTool('pen'); }
+    else if (e.key==='h'||e.key==='H'){ setTool('highlight'); }
+    else if (e.key==='e'||e.key==='E'){ setTool('eraser'); }
   });
   document.getElementById('nextBtn').addEventListener('click', function(e){ e.stopPropagation(); go(1); });
   document.getElementById('prevBtn').addEventListener('click', function(e){ e.stopPropagation(); go(-1); });
   document.getElementById('viewport').addEventListener('click', function(e){
-    if (drawMode) return;
+    if (activeTool) return;
     var rect = stage.getBoundingClientRect();
     var x = e.clientX - rect.left;
     if (x < rect.width*0.28){ go(-1); } else { go(1); }
