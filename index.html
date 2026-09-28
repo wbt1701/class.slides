@@ -791,10 +791,17 @@
   }
   function go(d){ idx = Math.min(total-1, Math.max(0, idx+d)); render(); }
   function fit(){
-    var scale = Math.min(window.innerWidth/1280, window.innerHeight/720);
+    var vv = window.visualViewport;
+    var vw = vv ? vv.width : window.innerWidth;
+    var vh = vv ? vv.height : window.innerHeight;
+    var scale = Math.min(vw/1280, vh/720);
     stage.style.transform = 'scale(' + scale + ')';
   }
-  window.addEventListener('resize', fit); fit();
+  window.addEventListener('resize', fit);
+  window.addEventListener('orientationchange', function(){ setTimeout(fit, 50); setTimeout(fit, 300); setTimeout(fit, 600); });
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', fit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  fit(); setTimeout(fit, 300);
   document.addEventListener('keydown', function(e){
     if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName)) return;
     if (e.key==='ArrowRight'||e.key===' '||e.key==='PageDown'){ go(1); e.preventDefault(); }
