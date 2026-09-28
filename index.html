@@ -35,6 +35,15 @@
   .pentools .sz.on{background:#E85C7B;}
   .pentools .sz.on i{background:#FFFFFF;}
   .pentools .sep{width:2px;height:24px;background:#E2E8F0;margin:0 2px;}
+  @media print{
+    @page{size:13.333in 7.5in;margin:0;}
+    html,body{background:#fff !important;overflow:visible !important;width:1280px;height:auto !important;}
+    #viewport{position:static !important;display:block !important;background:#fff !important;}
+    #stage{transform:none !important;box-shadow:none !important;border-radius:0 !important;width:1280px;height:auto !important;overflow:visible !important;}
+    .slide{position:relative !important;display:block !important;page-break-after:always;break-after:page;}
+    .slide:last-child{page-break-after:auto;break-after:auto;}
+    .edge,.ink,.pentools,#navbar{display:none !important;}
+  }
 </style>
 </head>
 <body>
@@ -694,7 +703,7 @@
     <div class="edge" id="edgeR" style="position:absolute;right:0;top:0;width:72%;height:100%;z-index:30;cursor:pointer;"></div>
   </div>
 </div>
-<div style="position:fixed;left:0;right:0;bottom:14px;display:flex;justify-content:center;align-items:center;gap:16px;z-index:50;">
+<div id="navbar" style="position:fixed;left:0;right:0;bottom:14px;display:flex;justify-content:center;align-items:center;gap:16px;z-index:50;">
   <div style="display:flex;align-items:center;gap:20px;background:rgba(255,255,255,.95);padding:8px 22px;border-radius:999px;box-shadow:0 6px 18px rgba(0,0,0,.3);">
     <button class="navbtn" id="prevBtn" title="이전 (←)">←</button>
     <div class="pageind" id="pageIndicator">1 / 50</div>
