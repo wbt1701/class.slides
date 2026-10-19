@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="ko"><head><meta charset="UTF-8"><title>행렬과 경제 - 수업 슬라이드</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css">
+<style>*{box-sizing:border-box}
+html,body{margin:0;height:100%;background:#2B2F3A;overflow:hidden;font-family:'Pretendard','Malgun Gothic','Apple SD Gothic Neo',sans-serif;color:#2B2F3A;word-break:keep-all}
+#vp{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+#stage{position:relative;width:1280px;height:720px;flex:none;transform-origin:center center;background:#DDE3EE;overflow:hidden;box-shadow:0 20px 60px rgba(0,0,0,.45)}
+.slide{position:absolute;inset:0;display:none}
+.slide.active{display:block}
+body.static *{animation:none!important;transition:none!important}
+
+/* ---- folder card (same look as the fill-in notes) ---- */
+.shade{position:absolute;left:34px;top:50px;right:8px;bottom:6px;background:#4574C2;border-radius:30px}
+.tab{position:absolute;left:18px;top:20px;width:420px;height:70px;background:#5B8FDC;border-radius:28px 34px 0 0}
+.folder{position:absolute;left:18px;top:46px;right:22px;bottom:14px;background:#5B8FDC;border-radius:0 30px 30px 30px}
+.sheet{position:absolute;left:40px;top:72px;right:44px;bottom:34px;background:#fff;border-radius:6px 6px 18px 18px;padding:0 36px;display:flex;flex-direction:column}
+.stack{flex:0 0 14px;margin:0 -36px;background:
+  linear-gradient(#D5DAE3,#D5DAE3) 0 4px/100% 1px no-repeat,
+  linear-gradient(#D5DAE3,#D5DAE3) 0 8px/100% 1px no-repeat,
+  linear-gradient(#D5DAE3,#D5DAE3) 0 12px/100% 1px no-repeat,
+  linear-gradient(#EEF1F6,#EEF1F6) 0 0/100% 14px no-repeat}
+.eyebrow{flex:0 0 30px;display:flex;align-items:center;justify-content:center;font-size:17px;letter-spacing:.3em;color:#6C7280;font-weight:500}
+.rule{flex:0 0 1px;height:1px;background:#C4C8D0}
+.titlerow{flex:0 0 62px;display:flex;align-items:center;justify-content:center}
+h1{margin:0;font-size:42px;font-weight:700;letter-spacing:-.01em;line-height:1.1;white-space:nowrap}
+.t1{background:linear-gradient(transparent 68%,#D9E4F6 68%);padding:0 2px;color:#4F86D9}
+.t1.c-think{color:#4F86D9}.t1.c-concept{color:#2F63B8}.t1.c-prob{color:#C1573D;background:linear-gradient(transparent 68%,#F8DDD3 68%)}.t1.c-read{color:#1F3B57}.t1.c-end{color:#2F63B8}
+.t2{color:#4B4B52}
+.body{flex:1;min-height:0;padding:8px 0;display:flex;flex-direction:column;justify-content:center;gap:12px;font-size:30px;line-height:1.45}
+.bar{flex:0 0 38px;margin:0 0 14px;background:#EBEEF3;border-radius:12px;display:flex;align-items:center;font-size:18px;color:#4B4F5A}
+.bar span{flex:1;text-align:center;position:relative}
+.bar span+span::before{content:'';position:absolute;left:0;top:50%;transform:translateY(-50%);width:2px;height:16px;background:#3F4350}
+.bar .pg{font-weight:700;font-size:20px}
+
+/* ---- reveal engine ---- */
+.s{opacity:0;visibility:hidden;transform:translateY(10px);transition:opacity .4s,transform .4s,visibility .4s}
+.s.on{opacity:1;visibility:visible;transform:none}
+.u{opacity:0;transition:opacity .3s}.u.on{opacity:1}
+.sw{opacity:0;transition:opacity .3s}.sw.hot{opacity:1}
+.anim td.s{transition:none;transform:none}
+.anim td.s.on{animation:pop .5s both;animation-delay:var(--d,0s)}
+@keyframes pop{from{opacity:0;transform:scale(.5)}to{opacity:1;transform:none}}
+@keyframes beat{0%,100%{transform:scale(1)}50%{transform:scale(1.18)}}
+
+/* ---- text blocks ---- */
+.cap{font-size:24px;color:#6C7280;font-weight:600}.cap.r{text-align:right}.cap.center{text-align:center}.r2{font-weight:500;float:right}
+.sm{font-size:26px;font-weight:500;color:#4B4F5A}.sm2{font-size:26px;font-weight:500;color:#4B4F5A}.sm3{font-size:26px}
+.ptext{font-size:30px;line-height:1.5;font-weight:500}.ptext.tight{line-height:1.4}.ptext.big3{font-size:30px;line-height:1.6}
+.center{display:flex;justify-content:center;align-items:center}.vmid{display:flex;flex-direction:column;justify-content:center;gap:12px}
+.box{background:#EAF2F6;border-left:10px solid #2E6F95;border-radius:14px;padding:10px 24px}
+.box.pe{background:#FBEAE3;border-left-color:#C1573D}
+.box.tall{min-height:150px;font-size:34px}.box.big2{font-size:30px;line-height:1.55}
+.hd2{font-size:40px;color:#2F63B8}.blue{color:#2F63B8}.acc{color:#C1573D}
+.q{font-size:36px;font-weight:700;text-align:center;background:#FBEAE3;border:3px solid #C1573D;border-radius:18px;padding:10px 20px;color:#1F3B57}
+.q b{display:inline-grid;place-items:center;width:46px;height:46px;border-radius:50%;background:#C1573D;color:#fff;margin-right:10px;font-size:32px}
+.note{font-size:32px;font-weight:700;text-align:center;color:#1F3B57;background:#EAF2F6;border-radius:12px;padding:6px 16px}
+.bigeq{font-size:50px;font-weight:700;text-align:center;color:#1F3B57}
+.ans{background:#fff;border:3px solid #C1573D;border-left-width:14px;border-radius:12px;padding:8px 22px;font-weight:700;font-size:32px}
+.tag{display:inline-block;background:#C1573D;color:#fff;font-weight:700;border-radius:999px;padding:0 18px;margin-right:10px;font-size:28px}
+.goal{font-size:56px;font-weight:700;color:#1F3B57;text-align:center;line-height:1.35;background:#EAF2F6;border:4px solid #2E6F95;border-radius:24px;padding:40px 20px}
+.pills{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
+.pill{background:#fff;border:3px solid #2E6F95;border-radius:999px;padding:4px 26px;font-size:32px;font-weight:700;color:#1F3B57}
+.finalbox{font-size:58px;font-weight:700;text-align:center;color:#1F3B57;background:#EAF2F6;border:4px solid #2E6F95;border-radius:24px;padding:56px 20px;line-height:1.4}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:20px;align-items:start}
+.two.lr{grid-template-columns:auto 1fr;align-items:center;gap:34px}
+.two.lr3{grid-template-columns:1.3fr 1fr;align-items:center;gap:28px}
+.two.tabs{align-items:start}
+.rcol{display:flex;flex-direction:column;gap:12px}
+.eq{display:flex;align-items:center;justify-content:center;gap:12px;font-size:36px}
+.lbl{font-weight:600;white-space:nowrap}.gapl{margin-left:28px}
+
+/* ---- tables ---- */
+table.t{border-collapse:collapse;width:100%;font-size:30px;text-align:center}
+table.t th{background:#1F3B57;color:#fff;font-weight:700;padding:3px 8px;border:2px solid #fff;line-height:1.25}
+table.t th.rh{background:#EAF2F6;color:#1F3B57}
+table.t td{border:2px solid #C9D6E0;padding:3px 8px;background:#fff}
+table.t.big{font-size:34px}table.t.big td,table.t.big th{padding:8px 6px}
+table.t.wide{font-size:28px}table.t.wide th,table.t.wide td{padding:4px 3px}
+table.t.io{font-size:28px}table.t.io th,table.t.io td{padding:3px 6px}
+table.t.half td,table.t.half th{padding:6px 8px}
+
+/* ---- matrices ---- */
+.mx{display:inline-flex;align-items:stretch;vertical-align:middle}
+.mx svg{width:24px;flex:none;overflow:visible}
+.mx path,.lm svg path,.lm2 svg path,.mpl path,.mpr path{fill:none;stroke:#2B2F3A;stroke-width:3.4;vector-effect:non-scaling-stroke;stroke-linecap:round}
+.mx .g{display:grid;gap:6px 8px;padding:4px 6px;align-items:center;justify-items:stretch;font-size:38px}
+.c{min-width:var(--cw,84px);min-height:var(--rh,56px);display:flex;align-items:center;justify-content:center;border-radius:10px;padding:0 10px;white-space:nowrap;line-height:1.25;transition:background .3s,color .3s,transform .3s}
+.c.rc{display:grid;place-items:center;background:#FBEAE3;text-align:center;line-height:1.3}
+.rc .ph,.rc .ex{grid-area:1/1}.rc .ph{color:#B0A39C;font-weight:700}
+.hot.r{background:#D7E8F7;color:#1F3B57}
+.hot.cl{background:#FBD9CE;color:#8A3420}
+.hot.xx,.hot.rc{background:#C1573D;color:#fff}
+.c.pulse.hot{background:#C1573D;color:#fff;animation:beat 1s infinite}
+.st1 .c.rA{background:#D7E8F7;color:#1F3B57}
+.st2 .c.cB{background:#FBD9CE;color:#8A3420}
+.st2 .c.x2{background:#C1573D;color:#fff}
+.st3 .c.x3{background:#C1573D;color:#fff}
+.st1 .c.cc1{background:#D7E8F7;color:#1F3B57}
+.st2 .c.cc2{background:#FBD9CE;color:#8A3420}
+
+/* labelled matrices */
+.lm{display:grid;grid-template-columns:130px 30px repeat(3,110px) 30px;grid-template-rows:42px 64px 64px;gap:4px;align-items:center;justify-items:center;font-size:44px}
+.lm .c{min-width:0;width:100%;min-height:60px}
+.lm .lab,.lm2 .lab{font-size:26px;font-weight:700;color:#6C7280;white-space:nowrap}
+.lm .rowl.hot,.lab.rowl.hot{color:#2F63B8;font-size:30px}
+.lm .hc.hot,.lab.hc.hot{color:#C1573D;font-size:30px}
+.lpar{grid-row:span 2;align-self:stretch;width:100%}.lpar svg{width:100%;height:100%;overflow:visible}
+.lm2{display:grid;grid-template-columns:230px 30px 150px 150px 30px;grid-template-rows:42px 64px 64px;gap:4px;align-items:center;justify-items:center;font-size:42px}
+.lm2 .c{min-width:0;width:100%}
+.lpar2{align-self:stretch;width:100%}.lpar2 svg{width:100%;height:100%;overflow:visible}
+
+/* ---- table -> matrix morph ---- */
+.morph{display:flex;justify-content:center}
+.mg{display:grid;grid-template-columns:150px 30px repeat(7,118px) 30px;grid-template-rows:56px 62px 62px;gap:4px;font-size:30px;position:relative}
+.mg .hd{background:#1F3B57;color:#fff;font-weight:700;display:flex;align-items:center;justify-content:center;border-radius:8px;transition:opacity .6s}
+.mg .hd.rl{background:#EAF2F6;color:#1F3B57}.mg .hd.corner{background:transparent}
+.mg .v{display:flex;align-items:center;justify-content:center;background:#fff;border:2px solid #C9D6E0;border-radius:8px;transition:border-color .6s,background .6s,font-size .6s}
+.st1 .mg .hd{opacity:0}.st1 .mg .v{border-color:transparent;background:transparent;font-size:36px}
+.mpl,.mpr{opacity:0;grid-row:2/4;width:100%;height:100%;transition:opacity .6s;overflow:visible}.mpl{grid-column:2}.mpr{grid-column:10}
+.st2 .mpl,.st2 .mpr{opacity:1}
+.flow{display:flex;justify-content:center;align-items:center;gap:18px;font-size:36px}
+.fb{padding:4px 36px;border-radius:14px;background:#EAF2F6;border:3px solid #2E6F95;font-weight:700;color:#1F3B57}
+.arrow{color:#2E6F95;font-weight:700}
+.st2 .fb3{background:#C1573D;color:#fff;border-color:#C1573D}
+
+/* ---- calculation slides ---- */
+.line1{font-size:34px;text-align:center;font-weight:600;color:#1F3B57}
+.line2{font-size:48px;text-align:center;font-weight:700}
+.line3{font-size:54px;text-align:center;font-weight:700}
+.tagc{font-size:30px;background:#C1573D;color:#fff;border-radius:999px;padding:2px 20px;margin-left:16px;vertical-align:middle}
+.rule-line{position:relative;height:56px}
+.sw{position:absolute;left:0;right:0;text-align:center;font-size:30px;font-weight:600}
+.sizes{gap:16px;align-items:baseline}.sz{font-size:60px;font-weight:700;color:#1F3B57}.op{font-size:56px;font-weight:700}.mid{color:#C1573D}
+.st1 .mid{background:#FBD9CE;border-radius:8px;padding:0 8px}
+.sz.res{color:#C1573D}
+.neq{font-size:80px;color:#C1573D;font-weight:700;margin:0 10px}
+.powers div{font-size:54px;font-weight:700;text-align:center;margin:6px 0;color:#1F3B57}
+.svgbox{height:300px}.svgbox svg{width:100%;height:100%}
+.cards{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.card{background:#EAF2F6;border:3px solid #2E6F95;border-radius:20px;padding:22px 8px;text-align:center}
+.card .ic{font-size:76px;color:#2E6F95;font-weight:700;line-height:1.1}.card .ct{font-size:36px;font-weight:700;color:#1F3B57;margin-top:8px}.card .cd{font-size:28px;margin-top:8px}
+.card.acc{background:#FBEAE3;border-color:#C1573D}.card.acc .ic{color:#C1573D}
+
+/* ---- cover ---- */
+.cov .sheet{justify-content:center;align-items:center;text-align:center}
+.cov .bar{align-self:stretch;margin-top:auto}
+.cov .cover{flex:1;display:flex;flex-direction:column;justify-content:center;align-items:center;gap:10px}
+.ceb{font-size:32px;font-weight:700;color:#2E6F95;letter-spacing:.08em}
+.cti{font-size:130px;font-weight:700;line-height:1.1}.cti .t1{color:#4F86D9}.cti .t2{color:#4B4B52}
+.csub{font-size:52px;font-weight:700;color:#1F3B57}
+.cline{width:880px;height:3px;background:#1F3B57;margin:8px 0}
+.cdesc{font-size:30px;color:#6C7280;font-style:italic}
+.lm.lm-p{grid-template-columns:130px 30px 120px 120px 30px}
+
+.dense .body{gap:6px}
+.dense .cap{line-height:1.1}
+.dense table.t.io th,.dense table.t.io td{padding:1px 6px;line-height:1.15}
+.dense .ptext.tight{font-size:28px;line-height:1.3}
+</style></head>
+<body><div id="vp"><div id="stage">
+<section class="slide cov" data-steps="0"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet"><div class="cover">
+    <div class="ceb">경제수학 3단원 - 1</div>
+    <div class="cti"><span class="t1">행렬과</span><span class="t2"> 경제</span></div>
+    <div class="csub">행렬과 경제 현상</div>
+    <div class="cline"></div>
+    <div class="cdesc">경제 자료를 행렬로 나타내고, 행렬의 연산으로 경제 현상을 설명해 봐요.</div>
+  </div><div class="bar"><span>광주하남 공동교육과정</span><span>F : 전체화면   ←  → : 이동</span><span class="pg">1 / 41</span></div></div></section>
+<section class="slide " data-steps="5"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">학습 목표</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-concept">학습 목표</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="goal">경제 현상을 행렬로 나타내고<br>연산할 수 있다.</div>
+    <div class="pills">
+      <span class="x pill s" data-s="1">표 → 행렬</span><span class="x pill s" data-s="2">합 · 차</span><span class="x pill s" data-s="3">실수배</span><span class="x pill s" data-s="4">곱셈</span><span class="x pill s" data-s="5">수요 예측</span>
+    </div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">2 / 41</span></div></div></section>
+<section class="slide " data-steps="1"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">① 표 → 행렬</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-think">생각해 보기</span><span class="t2"> 수출·수입량</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="box big2"><b>2019년 우리나라와 G7 국가 간의 수출·수입량</b><br>
+    외교부 자료에 의하면 미국과 수출은 733억 달러, 수입은 619억 달러, 영국과 수출은 55억 달러, 수입은 42억 달러, 프랑스와 수출은 33억 달러, 수입은 58억 달러, 독일과 수출은 87억 달러, 수입은 199억 달러, 일본과 수출은 284억 달러, 수입은 476억 달러, 이탈리아와 수출은 38억 달러, 수입은 64억 달러, 캐나다와 수출은 56억 달러, 수입은 58억 달러입니다.</div>
+    <div class="cap r">출처: 외교부 공공데이터 개방</div>
+    <div class="q s" data-s="1"><b>?</b> 한눈에 비교하려면 어떻게 나타내면 좋을까?</div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">3 / 41</span></div></div></section>
+<section class="slide anim" data-steps="1"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">① 표 → 행렬</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-concept">글 → 표</span><span class="t2"> 표로 정리하기</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="cap">우리나라와 G7 국가 간의 교역량 <span class="r2">(단위: 억 달러)</span></div>
+    <table class="t big"><tr><th></th><th>미국</th><th>영국</th><th>프랑스</th><th>독일</th><th>일본</th><th>이탈리아</th><th>캐나다</th></tr><tr><th class="rh">수출량</th><td class=" s" data-s="1" style="--d:0s">733</td><td class=" s" data-s="1" style="--d:0.13s">55</td><td class=" s" data-s="1" style="--d:0.26s">33</td><td class=" s" data-s="1" style="--d:0.39s">87</td><td class=" s" data-s="1" style="--d:0.52s">284</td><td class=" s" data-s="1" style="--d:0.65s">38</td><td class=" s" data-s="1" style="--d:0.78s">56</td></tr><tr><th class="rh">수입량</th><td class=" s" data-s="1" style="--d:0.91s">619</td><td class=" s" data-s="1" style="--d:1.04s">42</td><td class=" s" data-s="1" style="--d:1.17s">58</td><td class=" s" data-s="1" style="--d:1.3s">199</td><td class=" s" data-s="1" style="--d:1.4300000000000002s">476</td><td class=" s" data-s="1" style="--d:1.56s">64</td><td class=" s" data-s="1" style="--d:1.69s">58</td></tr></table>
+    <div class=" note s" data-s="1">표는 가로줄과 세로줄에 이름이 붙어 있어 한눈에 비교할 수 있다.</div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">4 / 41</span></div></div></section>
+<section class="slide " data-steps="2"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">① 표 → 행렬</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-concept">표 → 행렬</span><span class="t2"> 숫자만 괄호로 묶기</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="morph"><div class="mg"><div class="hd corner"></div><div class="pgap"></div><div class="hd">미국</div><div class="hd">영국</div><div class="hd">프랑스</div><div class="hd">독일</div><div class="hd">일본</div><div class="hd">이탈리아</div><div class="hd">캐나다</div><div class="pgap"></div><div class="hd rl">수출량</div><div class="v">733</div><div class="v">55</div><div class="v">33</div><div class="v">87</div><div class="v">284</div><div class="v">38</div><div class="v">56</div><div class="hd rl">수입량</div><div class="v">619</div><div class="v">42</div><div class="v">58</div><div class="v">199</div><div class="v">476</div><div class="v">64</div><div class="v">58</div>
+        <svg class="mpl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg>
+        <svg class="mpr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></div></div>
+      <div class="flow">
+        <div class="fb fb1">글</div><div class="arrow">→</div><div class="fb fb2">표</div><div class="arrow">→</div><div class="fb fb3">행렬</div>
+      </div>
+      <div class=" note s" data-s="2">머리글을 떼고 숫자만 괄호로 묶으면 <b>2×7 행렬</b>이 된다.</div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">5 / 41</span></div></div></section>
+<section class="slide " data-steps="1"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">① 표 → 행렬</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-concept">개념 정리</span><span class="t2"> 행렬과 성분</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="two">
+      <div class="box tall"><b class="hd2">행렬</b><br>수나 문자를 직사각형 모양으로 배열하고 괄호로 묶은 것</div>
+      <div class="box pe tall s" data-s="1"><b class="hd2">성분</b><br>행렬을 이루는 각각의 수 또는 문자</div>
+    </div>
+    <div class="center"><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(3,auto);font-size:40px;"><span class="c"><span>733</span></span><span class="c"><span>55</span></span><span class="c"><span>33</span></span><span class="c"><span>619</span></span><span class="c"><span>42</span></span><span class="c"><span>58</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span></div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">6 / 41</span></div></div></section>
+<section class="slide " data-steps="1"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">① 표 → 행렬</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-think">생각해 보기</span><span class="t2"> 숫자의 위치</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="center vmid"><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(3,auto);font-size:64px;--cw:110px;--rh:92px;"><span class="c"><span>2</span></span><span class="c pulse h" data-h="1"><span>7</span></span><span class="c"><span>4</span></span><span class="c"><span>8</span></span><span class="c"><span>5</span></span><span class="c"><span>1</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span></div>
+    <div class="q"><b>?</b> 7은 몇 번째 줄, 몇 번째 줄에 있을까?</div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">7 / 41</span></div></div></section>
+<section class="slide " data-steps="4"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">① 표 → 행렬</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-concept">개념 정리</span><span class="t2"> 행·열과 (i, j) 성분</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="two lr">
+    <div class="lcol">
+      <div class="lm">
+        <div class="lab"></div><div class="lab"></div>
+        <div class="lab">제1열</div><div class="lab hc" data-k="2">제2열</div><div class="lab">제3열</div><div class="lab"></div>
+        <div class="lab rowl k" data-k="1">제1행</div>
+        <div class="lpar"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg></div>
+        <span class="c rA"><span>11</span></span><span class="c rA cB x3"><span>10</span></span><span class="c rA"><span>8</span></span>
+        <div class="lpar"><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></div>
+        <div class="lab">제2행</div>
+        <span class="c"><span>8</span></span><span class="c cB"><span>12</span></span><span class="c"><span>4</span></span>
+      </div>
+    </div>
+    <div class="rcol">
+      <div class="box s" data-s="1"><b class="blue">행</b> 가로줄 (제1행, 제2행)</div>
+      <div class="box pe s" data-s="2"><b class="acc">열</b> 세로줄 (제1열, 제2열)</div>
+      <div class="box s" data-s="3"><b>(1, 2) 성분</b> = 10 → a<sub>12</sub><br><span class="sm">(i, j) 성분 a<sub>ij</sub></span></div>
+      <div class="box pe s" data-s="4"><b>2×3 행렬</b> <span class="sm">행 2개 × 열 3개 → <i>m</i>×<i>n</i> 행렬</span></div>
+    </div>
+  </div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">8 / 41</span></div></div></section>
+<section class="slide " data-steps="0"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">① 표 → 행렬</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-prob">함께하기 1</span><span class="t2"> 문제</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="ptext">다음은 2013년부터 2022년까지의 경제 성장률을 나타낸 표이다. (단, 국내 총생산은 실질 국내 총생산으로, 천억의 자리에서 반올림한 값이다.)</div>
+      <table class="t wide"><tr><th>연도(년)</th><th>2013</th><th>2014</th><th>2015</th><th>2016</th><th>2017</th><th>2018</th><th>2019</th><th>2020</th><th>2021</th><th>2022</th></tr><tr><th class="rh">경제 성장률(%)</th><td class="">3.2</td><td class="">3.2</td><td class="">2.8</td><td class="">2.9</td><td class="">3.2</td><td class="">2.9</td><td class="">2.2</td><td class="">−0.7</td><td class="">4.1</td><td class="">2.6</td></tr><tr><th class="rh">국내 총생산<br>(조 원)</th><td class="">1,563</td><td class="">1,613</td><td class="">1,658</td><td class="">1,706</td><td class="">1,761</td><td class="">1,812</td><td class="">1,853</td><td class="">1,840</td><td class="">1,916</td><td class="">1,965</td></tr></table>
+      <div class="cap r">출처: KOSIS 국가 통계 포털</div>
+      <div class="ptext">위 표를 2×10 행렬로 나타냈을 때, (1, 10) 성분과 (2, 8) 성분이 각각 무엇인지 말하시오.</div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">9 / 41</span></div></div></section>
+<section class="slide " data-steps="2"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">① 표 → 행렬</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-prob">함께하기 1</span><span class="t2"> 풀이</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="ptext">주어진 표를 2×10 행렬로 나타내면</div>
+      <div class="center"><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(10,auto);font-size:36px;--cw:84px;--rh:56px;"><span class="c"><span>3.2</span></span><span class="c"><span>3.2</span></span><span class="c"><span>2.8</span></span><span class="c"><span>2.9</span></span><span class="c"><span>3.2</span></span><span class="c"><span>2.9</span></span><span class="c"><span>2.2</span></span><span class="c"><span>−0.7</span></span><span class="c"><span>4.1</span></span><span class="c xx k" data-k="1"><span>2.6</span></span><span class="c"><span>1563</span></span><span class="c"><span>1613</span></span><span class="c"><span>1658</span></span><span class="c"><span>1706</span></span><span class="c"><span>1761</span></span><span class="c"><span>1812</span></span><span class="c"><span>1853</span></span><span class="c xx k" data-k="2"><span>1840</span></span><span class="c"><span>1916</span></span><span class="c"><span>1965</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span></div>
+      <div class="box s" data-s="1">(1, 10) 성분은 <b>2.6</b> → 2022년의 경제 성장률</div>
+      <div class="box pe s" data-s="2">(2, 8) 성분은 <b>1840</b> → 2020년의 국내 총생산</div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">10 / 41</span></div></div></section>
+<section class="slide " data-steps="0"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">① 표 → 행렬</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-prob">함께하기 2</span><span class="t2"> 문제 ①</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="ptext big3">다음은 어느 나라의 투입산출표이다. 이 표의 세로 방향은 각 산업에서 생산 활동을 위해 사용한 중간재와 노동, 자본 등 생산 요소를 나타내고, 가로 방향은 각 산업에서 생산된 산출물이 어떤 부문에 얼마나 투입되었는지를 나타낸다. 이 표를 5×5 행렬 <i>A</i>로 나타냈다.<br>
+    (단, 행렬 <i>A</i>의 (<i>i</i>, <i>j</i>) 성분은 제 <i>j</i>번째 제품을 생산하기 위해 투입된 제 <i>i</i>번째 제품의 양이다.)</div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">11 / 41</span></div></div></section>
+<section class="slide dense" data-steps="0"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">① 표 → 행렬</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-prob">함께하기 2</span><span class="t2"> 문제 ②</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="cap">투입산출표 <span class="r2">(단위: 억 원)</span></div>
+    <table class="t io"><tr><th>투입물＼산출물</th><th>화학 제품</th><th>비금속<br>광물 제품</th><th>금속 가공<br>제품</th><th>기계 및<br>장비</th><th>운송 장비</th></tr><tr><th class="rh">화학 제품</th><td class="">900</td><td class="">20</td><td class="">47</td><td class="">50</td><td class="">170</td></tr><tr><th class="rh">비금속 광물 제품</th><td class="">13</td><td class="">62</td><td class="">5</td><td class="">5</td><td class="">14</td></tr><tr><th class="rh">금속 가공 제품</th><td class="">190</td><td class="">6</td><td class="">151</td><td class="">139</td><td class="">154</td></tr><tr><th class="rh">기계 및 장비</th><td class="">4</td><td class="">2</td><td class="">7</td><td class="">579</td><td class="">127</td></tr><tr><th class="rh">운송 장비</th><td class="">32</td><td class="">4</td><td class="">28</td><td class="">274</td><td class="">76</td></tr></table>
+    <div class="ptext tight">[1] 행렬 <i>A</i>의 두 번째 행의 성분의 합이 의미하는 바를 말하시오.<br>[2] 행렬 <i>A</i>의 두 번째 열의 성분의 합이 의미하는 바를 말하시오.</div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">12 / 41</span></div></div></section>
+<section class="slide " data-steps="2"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">① 표 → 행렬</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-prob">함께하기 2</span><span class="t2"> 풀이</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="two lr">
+    <div class="lcol"><div class="eq"><span class="x lbl"><i>A</i> =</span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(5,auto);font-size:36px;--cw:84px;--rh:58px;"><span class="c"><span>900</span></span><span class="c cB "><span>20</span></span><span class="c"><span>47</span></span><span class="c"><span>50</span></span><span class="c"><span>170</span></span><span class="c rA "><span>13</span></span><span class="c rA cB x2"><span>62</span></span><span class="c rA "><span>5</span></span><span class="c rA "><span>5</span></span><span class="c rA "><span>14</span></span><span class="c"><span>190</span></span><span class="c cB "><span>6</span></span><span class="c"><span>151</span></span><span class="c"><span>139</span></span><span class="c"><span>154</span></span><span class="c"><span>4</span></span><span class="c cB "><span>2</span></span><span class="c"><span>7</span></span><span class="c"><span>579</span></span><span class="c"><span>127</span></span><span class="c"><span>32</span></span><span class="c cB "><span>4</span></span><span class="c"><span>28</span></span><span class="c"><span>274</span></span><span class="c"><span>76</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span></div></div>
+    <div class="rcol">
+      <div class="box s" data-s="1"><b class="blue">[1]</b> 두 번째 행의 합<br>13 + 62 + 5 + 5 + 14 = <b>99</b><br><span class="sm">99억 원의 비금속 광물 제품이 다른 산업 부문에 투입되었다.</span></div>
+      <div class="box pe s" data-s="2"><b class="acc">[2]</b> 두 번째 열의 합<br>20 + 62 + 6 + 2 + 4 = <b>94</b><br><span class="sm">비금속 광물 제품 생산에 총 94억 원의 생산 요소가 투입되었다.</span></div>
+    </div></div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">13 / 41</span></div></div></section>
+<section class="slide " data-steps="1"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">② 행렬의 합과 차</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-think">생각해 보기</span><span class="t2"> 생산 가능 인구</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="two">
+      <div><div class="cap">경제 활동 인구 <span class="r2">(단위: 만 명)</span></div><table class="t half"><tr><th></th><th>농가</th><th>비농가</th></tr><tr><th class="rh">2002년</th><td class="">251</td><td class="">2,047</td></tr><tr><th class="rh">2012년</th><td class="">203</td><td class="">2,376</td></tr><tr><th class="rh">2022년</th><td class="">179</td><td class="">2,713</td></tr></table></div>
+      <div><div class="cap">비경제 활동 인구 <span class="r2">(단위: 만 명)</span></div><table class="t half"><tr><th></th><th>농가</th><th>비농가</th></tr><tr><th class="rh">2002년</th><td class="">88</td><td class="">1,316</td></tr><tr><th class="rh">2012년</th><td class="">73</td><td class="">1,535</td></tr><tr><th class="rh">2022년</th><td class="">48</td><td class="">1,586</td></tr></table></div>
+    </div>
+    <div class="cap r">출처: KOSIS 국가 통계 포털</div>
+    <div class="q s" data-s="1"><b>?</b> 2022년 비농가의 생산 가능 인구는 몇 명일까?</div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">14 / 41</span></div></div></section>
+<section class="slide " data-steps="2"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">② 행렬의 합과 차</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-concept">두 표 → 행렬 </span><span class="t2"> 같은 위치끼리</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="center"><div class="eq"><span class="x lbl"><i>A</i> =</span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:44px;--cw:110px;--rh:62px;"><span class="c"><span>251</span></span><span class="c"><span>2047</span></span><span class="c"><span>203</span></span><span class="c"><span>2376</span></span><span class="c"><span>179</span></span><span class="c xx k" data-k="1"><span>2713</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span><span class="x lbl gapl"><i>B</i> =</span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:44px;--cw:110px;--rh:62px;"><span class="c"><span>88</span></span><span class="c"><span>1316</span></span><span class="c"><span>73</span></span><span class="c"><span>1535</span></span><span class="c"><span>48</span></span><span class="c xx k" data-k="1"><span>1586</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span></div></div>
+    <div class=" note s" data-s="1">생산 가능 인구 = 경제 활동 인구 + 비경제 활동 인구</div>
+    <div class=" bigeq s" data-s="2">2,713 + 1,586 = <b class="acc">4,299</b> (만 명) <span class="sm2">← 같은 위치의 값끼리 더한다</span></div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">15 / 41</span></div></div></section>
+<section class="slide " data-steps="2"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">② 행렬의 합과 차</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-concept">개념 정리</span><span class="t2"> 행렬의 합과 차</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="box"><b>같은 꼴</b>의 행렬에서만 정의하고, <b>같은 위치</b>의 성분끼리 더하거나 뺀다.</div>
+    <div class="center"><div class="eq"><span class="x lbl"><i>A</i> =</span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:34px;--cw:74px;--rh:54px;"><span class="c"><span>a<sub>11</sub></span></span><span class="c"><span>a<sub>12</sub></span></span><span class="c"><span>a<sub>21</sub></span></span><span class="c"><span>a<sub>22</sub></span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span><span class="x lbl gapl"><i>B</i> =</span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:34px;--cw:74px;--rh:54px;"><span class="c"><span>b<sub>11</sub></span></span><span class="c"><span>b<sub>12</sub></span></span><span class="c"><span>b<sub>21</sub></span></span><span class="c"><span>b<sub>22</sub></span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span></div></div>
+    <div class="center"><div class="eq"><span class="x lbl s" data-s="1"><i>A</i> + <i>B</i> =</span><span class="mx s" data-s="1"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:28px;--cw:128px;--rh:54px;"><span class="c"><span>a<sub>11</sub> + b<sub>11</sub></span></span><span class="c"><span>a<sub>12</sub> + b<sub>12</sub></span></span><span class="c"><span>a<sub>21</sub> + b<sub>21</sub></span></span><span class="c"><span>a<sub>22</sub> + b<sub>22</sub></span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span><span class="x lbl gapl s" data-s="2"><i>A</i> − <i>B</i> =</span><span class="mx s" data-s="2"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:28px;--cw:128px;--rh:54px;"><span class="c"><span>a<sub>11</sub> − b<sub>11</sub></span></span><span class="c"><span>a<sub>12</sub> − b<sub>12</sub></span></span><span class="c"><span>a<sub>21</sub> − b<sub>21</sub></span></span><span class="c"><span>a<sub>22</sub> − b<sub>22</sub></span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span></div></div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">16 / 41</span></div></div></section>
+<section class="slide " data-steps="1"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">② 행렬의 합과 차</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-think">생각해 보기</span><span class="t2"> 5월과 6월 판매량</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="ptext">튼튼 자동차 용품점과 빨라 자동차 용품점의 5월, 6월 와이퍼와 에어컨 필터 판매량을 나타낸 표이다.</div>
+    <div class="two">
+      <div><div class="cap">5월 판매량 <span class="r2">(단위: 개)</span></div><table class="t half"><tr><th></th><th>와이퍼</th><th>에어컨 필터</th></tr><tr><th class="rh">튼튼</th><td class="">200</td><td class="">300</td></tr><tr><th class="rh">빨라</th><td class="">300</td><td class="">100</td></tr></table></div>
+      <div><div class="cap">6월 판매량 <span class="r2">(단위: 개)</span></div><table class="t half"><tr><th></th><th>와이퍼</th><th>에어컨 필터</th></tr><tr><th class="rh">튼튼</th><td class="">400</td><td class="">600</td></tr><tr><th class="rh">빨라</th><td class="">600</td><td class="">300</td></tr></table></div>
+    </div>
+    <div class="q s" data-s="1"><b>?</b> 5월 대비 6월에 판매량이 얼마나 늘었을까?</div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">17 / 41</span></div></div></section>
+<section class="slide " data-steps="4"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">② 행렬의 합과 차</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-prob">풀이</span><span class="t2"> 6월 − 5월</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="center"><div class="eq"><span class="x lbl"><i>A</i> =</span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:40px;--cw:100px;--rh:58px;"><span class="c r h" data-h="1"><span>200</span></span><span class="c r h" data-h="2"><span>300</span></span><span class="c r h" data-h="3"><span>300</span></span><span class="c r h" data-h="4"><span>100</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span><span class="x lbl gapl"><i>B</i> =</span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:40px;--cw:100px;--rh:58px;"><span class="c cl h" data-h="1"><span>400</span></span><span class="c cl h" data-h="2"><span>600</span></span><span class="c cl h" data-h="3"><span>600</span></span><span class="c cl h" data-h="4"><span>300</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span></div></div>
+    <div class="center"><div class="eq"><span class="x lbl"><i>B</i> − <i>A</i> =</span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:36px;--cw:170px;--rh:58px;"><span class="c s" data-s="1"><span>400 − 200</span></span><span class="c s" data-s="2"><span>600 − 300</span></span><span class="c s" data-s="3"><span>600 − 300</span></span><span class="c s" data-s="4"><span>300 − 100</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span><span class="x lbl">=</span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:40px;--cw:100px;--rh:58px;"><span class="c xx s" data-s="1"><span>200</span></span><span class="c xx s" data-s="2"><span>300</span></span><span class="c xx s" data-s="3"><span>300</span></span><span class="c xx s" data-s="4"><span>200</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span></div></div>
+    <div class=" note s" data-s="4">같은 위치의 성분끼리 뺀다</div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">18 / 41</span></div></div></section>
+<section class="slide " data-steps="2"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">③ 행렬의 실수배</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-think">생각해 보기</span><span class="t2"> 생산량 40% 증가</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="two">
+      <div><div class="cap">지난해 생산량 <span class="r2">(단위: 천 톤)</span></div><table class="t half"><tr><th></th><th>복숭아</th><th>사과</th></tr><tr><th class="rh">가</th><td class="">5</td><td class="">8</td></tr><tr><th class="rh">나</th><td class="">9</td><td class="">6</td></tr></table></div>
+      <div class="vmid"><div class="box pe s" data-s="1">두 과수원 모두<br>복숭아와 사과의 생산량이<br>지난해보다 <b class="acc">40%씩</b> 증가했다.</div></div>
+    </div>
+    <div class="q s" data-s="2"><b>?</b> 올해 생산량은 얼마일까?</div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">19 / 41</span></div></div></section>
+<section class="slide " data-steps="1"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">③ 행렬의 실수배</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-concept">개념 정리</span><span class="t2"> 행렬의 실수배</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="box">행렬 <i>A</i>의 <b>모든 성분</b>에 실수 <i>k</i>를 곱한 것을 <i>A</i>의 <i>k</i>배라 하고, <b><i>kA</i></b>로 나타낸다.</div>
+    <div class="center"><div class="eq"><span class="x lbl"><i>A</i> =</span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:40px;--cw:90px;--rh:62px;"><span class="c"><span>a<sub>11</sub></span></span><span class="c"><span>a<sub>12</sub></span></span><span class="c"><span>a<sub>21</sub></span></span><span class="c"><span>a<sub>22</sub></span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span><span class="x lbl">일 때</span><span class="x lbl gapl s" data-s="1"><i>kA</i> =</span><span class="mx s" data-s="1"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:40px;--cw:110px;--rh:62px;"><span class="c"><span><i>k</i>a<sub>11</sub></span></span><span class="c"><span><i>k</i>a<sub>12</sub></span></span><span class="c"><span><i>k</i>a<sub>21</sub></span></span><span class="c"><span><i>k</i>a<sub>22</sub></span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span></div></div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">20 / 41</span></div></div></section>
+<section class="slide " data-steps="0"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">③ 행렬의 실수배</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-prob">함께하기 3</span><span class="t2"> 문제</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="two lr3">
+    <div class="ptext">오른쪽 표는 복숭아와 사과를 생산하는 과수원 가, 나의 지난해 생산량을 나타낸 것이다. 새로운 농법을 적용한 결과, 두 과수원 모두 복숭아와 사과의 생산량이 지난해에 비해 40%씩 증가하였다고 할 때, 올해 생산량을 행렬로 나타내시오.</div>
+    <div class="vmid"><div class="cap"><span class="r2">(단위: 천 톤)</span></div><table class="t half"><tr><th></th><th>복숭아</th><th>사과</th></tr><tr><th class="rh">가</th><td class="">5</td><td class="">8</td></tr><tr><th class="rh">나</th><td class="">9</td><td class="">6</td></tr></table></div>
+  </div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">21 / 41</span></div></div></section>
+<section class="slide " data-steps="3"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">③ 행렬의 실수배</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-prob">함께하기 3</span><span class="t2"> 풀이·답</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="ptext">지난해 생산량을 2×2 행렬 <i>A</i>로 나타내면</div>
+    <div class="center"><div class="eq"><span class="x lbl"><i>A</i> =</span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:46px;--cw:90px;--rh:64px;"><span class="c"><span>5</span></span><span class="c"><span>8</span></span><span class="c"><span>9</span></span><span class="c"><span>6</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span></div></div>
+    <div class="center"><div class="eq"><span class="x lbl s" data-s="1"><i>A</i> + 0.4<i>A</i> = 1.4<i>A</i></span><span class="x lbl s" data-s="2">= 1.4</span><span class="mx s" data-s="2"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:40px;--cw:70px;--rh:58px;"><span class="c"><span>5</span></span><span class="c"><span>8</span></span><span class="c"><span>9</span></span><span class="c"><span>6</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span><span class="x lbl s" data-s="3">=</span><span class="mx s" data-s="3"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:40px;--cw:100px;--rh:58px;"><span class="c"><span>7</span></span><span class="c"><span>11.2</span></span><span class="c"><span>12.6</span></span><span class="c"><span>8.4</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span></div></div>
+    <div class="ans s" data-s="3"><span class="tag">답</span> 올해 생산량 = <i>1.4A</i> = 7, 11.2 / 12.6, 8.4 (단위: 천 톤)</div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">22 / 41</span></div></div></section>
+<section class="slide " data-steps="1"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">④ 행렬의 곱셈</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-think">생각해 보기</span><span class="t2"> 생태 공원 이용 요금</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="ptext">서준이네 가족과 진아네 가족은 생태 공원에 가려고 한다.</div>
+    <div class="two"><div><div class="cap">이용 요금 <span class="r2">(단위: 원)</span></div><table class="t half"><tr><th></th><th>성인</th><th>청소년</th></tr><tr><th class="rh">국립생태원</th><td class="">5,000</td><td class="">3,000</td></tr><tr><th class="rh">해양생태공원</th><td class="">4,000</td><td class="">2,000</td></tr></table></div><div><div class="cap">가족 수 <span class="r2">(단위: 명)</span></div><table class="t half"><tr><th></th><th>서준이네</th><th>진아네</th></tr><tr><th class="rh">성인</th><td class="">4</td><td class="">2</td></tr><tr><th class="rh">청소년</th><td class="">3</td><td class="">1</td></tr></table></div></div>
+    <div class="q s" data-s="1"><b>?</b> 서준이네가 국립생태원에 가면 얼마를 내야 할까?</div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">23 / 41</span></div></div></section>
+<section class="slide " data-steps="4"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">④ 행렬의 곱셈</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-concept">계산식</span><span class="t2"> 곱해서 더한다</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="two"><div class="box"><b>서준이네</b><br>성인 4명, 청소년 3명</div><div class="box pe"><b>국립생태원</b><br>성인 5,000원, 청소년 3,000원</div></div>
+    <div class="line1 s" data-s="1">(성인 수) × (성인 요금) + (청소년 수) × (청소년 요금)</div>
+    <div class="line2 s" data-s="2">4 × 5,000 + 3 × 3,000</div>
+    <div class="line2 s" data-s="3">= 20,000 + 9,000</div>
+    <div class="line3 s" data-s="4">= <b class="acc">29,000</b>원 <span class="tagc">곱해서 더한다</span></div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">24 / 41</span></div></div></section>
+<section class="slide " data-steps="4"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">④ 행렬의 곱셈</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-concept">개념 정리</span><span class="t2"> 곱셈 규칙</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="center"><div class="eq"><span class="x lbl"><i>A</i></span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:34px;--cw:74px;--rh:54px;"><span class="c r h" data-h="1 2"><span>a<sub>11</sub></span></span><span class="c r h" data-h="1 2"><span>a<sub>12</sub></span></span><span class="c r h" data-h="3 4"><span>a<sub>21</sub></span></span><span class="c r h" data-h="3 4"><span>a<sub>22</sub></span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span><span class="x lbl">×</span><span class="x lbl"><i>B</i></span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:34px;--cw:74px;--rh:54px;"><span class="c cl h" data-h="1 3"><span>b<sub>11</sub></span></span><span class="c cl h" data-h="2 4"><span>b<sub>12</sub></span></span><span class="c cl h" data-h="1 3"><span>b<sub>21</sub></span></span><span class="c cl h" data-h="2 4"><span>b<sub>22</sub></span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span></div></div>
+      <div class="center"><div class="eq"><span class="x lbl"><i>AB</i> =</span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:30px;--cw:230px;--rh:58px;"><span class="c xx rc h" data-h="1"><span class="ph u" data-u="1">?</span><span class="ex s" data-s="1">a<sub>11</sub>b<sub>11</sub> + a<sub>12</sub>b<sub>21</sub></span></span><span class="c xx rc h" data-h="2"><span class="ph u" data-u="2">?</span><span class="ex s" data-s="2">a<sub>11</sub>b<sub>12</sub> + a<sub>12</sub>b<sub>22</sub></span></span><span class="c xx rc h" data-h="3"><span class="ph u" data-u="3">?</span><span class="ex s" data-s="3">a<sub>21</sub>b<sub>11</sub> + a<sub>22</sub>b<sub>21</sub></span></span><span class="c xx rc h" data-h="4"><span class="ph u" data-u="4">?</span><span class="ex s" data-s="4">a<sub>21</sub>b<sub>12</sub> + a<sub>22</sub>b<sub>22</sub></span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span></div></div>
+      <div class="rule-line">
+        <div class="sw h" data-h="1">(1, 1) 성분 = <b class="blue">A의 1행</b>과 <b class="acc">B의 1열</b>을 차례로 곱해서 더한다</div>
+        <div class="sw h" data-h="2">(1, 2) 성분 = <b class="blue">A의 1행</b>과 <b class="acc">B의 2열</b>을 차례로 곱해서 더한다</div>
+        <div class="sw h" data-h="3">(2, 1) 성분 = <b class="blue">A의 2행</b>과 <b class="acc">B의 1열</b>을 차례로 곱해서 더한다</div>
+        <div class="sw h" data-h="4">(2, 2) 성분 = <b class="blue">A의 2행</b>과 <b class="acc">B의 2열</b>을 차례로 곱해서 더한다</div>
+      </div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">25 / 41</span></div></div></section>
+<section class="slide " data-steps="3"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">④ 행렬의 곱셈</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-concept">개념 정리</span><span class="t2"> 곱이 정의되는 조건</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="center sizes">
+      <span class="x sz"><i>m</i>×<i class="mid">l</i></span><span class="lbl">행렬</span><span class="x op">×</span><span class="x sz"><i class="mid">l</i>×<i>n</i></span><span class="lbl">행렬</span><span class="x op s" data-s="3">=</span><span class="x sz res s" data-s="3"><i>m</i>×<i>n</i> 행렬</span>
+    </div>
+    <div class="box s" data-s="1"><i>A</i>의 <b>열의 수</b> = <i>B</i>의 <b>행의 수</b> 일 때만 <i>AB</i>가 정의된다.</div>
+    <div class="box pe s" data-s="2"><i>m</i>×<i>l</i> 행렬과 <i>l</i>×<i>n</i> 행렬의 곱은 <b><i>m</i>×<i>n</i> 행렬</b>이다.</div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">26 / 41</span></div></div></section>
+<section class="slide " data-steps="0"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">④ 행렬의 곱셈</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-prob">함께하기 4</span><span class="t2"> 문제</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="ptext">이번 주말에 서준이네 가족과 진아네 가족은 생태 공원에 가려고 한다. 다음은 국립생태원과 해양생태공원의 이용 요금과 서준이네 가족과 진아네 가족의 가족 수이다.</div>
+    <div class="two tabs"><div><div class="cap">이용 요금 <span class="r2">(단위: 원)</span></div><table class="t half"><tr><th></th><th>성인</th><th>청소년</th></tr><tr><th class="rh">국립생태원</th><td class="">5,000</td><td class="">3,000</td></tr><tr><th class="rh">해양생태공원</th><td class="">4,000</td><td class="">2,000</td></tr></table></div><div><div class="cap">가족 수 <span class="r2">(단위: 명)</span></div><table class="t half"><tr><th></th><th>서준이네</th><th>진아네</th></tr><tr><th class="rh">성인</th><td class="">4</td><td class="">2</td></tr><tr><th class="rh">청소년</th><td class="">3</td><td class="">1</td></tr></table></div></div>
+    <div class="ptext tight">[1] 위의 표를 각각 2×2 행렬 <i>A</i>, <i>B</i>로 나타내시오.<br>[2] 행렬의 곱셈을 이용하여 두 가족이 각 생태 공원을 이용할 때 지불해야 할 금액을 각각 구하시오.</div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">27 / 41</span></div></div></section>
+<section class="slide " data-steps="2"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">④ 행렬의 곱셈</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-prob">함께하기 4</span><span class="t2"> 풀이 [1]</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="center"><div class="eq"><span class="x lbl s" data-s="1"><i>A</i> =</span><span class="mx s" data-s="1"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:50px;--cw:130px;--rh:70px;"><span class="c"><span>5000</span></span><span class="c"><span>3000</span></span><span class="c"><span>4000</span></span><span class="c"><span>2000</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span></div></div>
+    <div class="center"><div class="eq"><span class="x lbl s" data-s="2"><i>B</i> =</span><span class="mx s" data-s="2"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:50px;--cw:130px;--rh:70px;"><span class="c"><span>4</span></span><span class="c"><span>2</span></span><span class="c"><span>3</span></span><span class="c"><span>1</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span></div></div>
+    <div class=" note s" data-s="2"><i>A</i> = 이용 요금　<i>B</i> = 가족 수</div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">28 / 41</span></div></div></section>
+<section class="slide " data-steps="5"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">④ 행렬의 곱셈</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-prob">함께하기 4</span><span class="t2"> 풀이 [2]</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="center"><div class="eq"><span class="x lbl"><i>A</i> =</span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:36px;--cw:100px;--rh:54px;"><span class="c r h" data-h="1 2"><span>5000</span></span><span class="c r h" data-h="1 2"><span>3000</span></span><span class="c r h" data-h="3 4"><span>4000</span></span><span class="c r h" data-h="3 4"><span>2000</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span><span class="x lbl gapl"><i>B</i> =</span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:36px;--cw:70px;--rh:54px;"><span class="c cl h" data-h="1 3"><span>4</span></span><span class="c cl h" data-h="2 4"><span>2</span></span><span class="c cl h" data-h="1 3"><span>3</span></span><span class="c cl h" data-h="2 4"><span>1</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span></div></div>
+      <div class="center"><div class="eq"><span class="x lbl"><i>AB</i> =</span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:30px;--cw:250px;--rh:84px;"><span class="c xx rc h" data-h="1"><span class="ph u" data-u="1">?</span><span class="ex s" data-s="1">5000×4 + 3000×3<br><b>= 29000</b></span></span><span class="c xx rc h" data-h="2"><span class="ph u" data-u="2">?</span><span class="ex s" data-s="2">5000×2 + 3000×1<br><b>= 13000</b></span></span><span class="c xx rc h" data-h="3"><span class="ph u" data-u="3">?</span><span class="ex s" data-s="3">4000×4 + 2000×3<br><b>= 22000</b></span></span><span class="c xx rc h" data-h="4"><span class="ph u" data-u="4">?</span><span class="ex s" data-s="4">4000×2 + 2000×1<br><b>= 10000</b></span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span></div></div>
+      <div class=" ans s" data-s="5"><span class="tag">답</span> <i>AB</i> = 29000, 13000 / 22000, 10000</div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">29 / 41</span></div></div></section>
+<section class="slide " data-steps="2"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">④ 행렬의 곱셈</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-prob">함께하기 4</span><span class="t2"> 풀이 [2] 의미</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="center">
+      <div class="lm2">
+        <div class="lab"></div><div class="lab"></div><div class="lab c1">서준이네</div><div class="lab c1">진아네</div><div class="lab"></div>
+        <div class="lab r1">국립생태원</div><div class="lpar2" style="grid-row:span 2"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg></div><span class="c r k" data-k="1"><span>29000</span></span><span class="c r k" data-k="1"><span>13000</span></span><div class="lpar2" style="grid-row:span 2"><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></div>
+        <div class="lab r1">해양생태공원</div><span class="c cl k" data-k="2"><span>22000</span></span><span class="c cl k" data-k="2"><span>10000</span></span>
+      </div>
+    </div>
+    <div class="box s" data-s="1"><b>국립생태원</b>: 서준이네 <b>29,000원</b>, 진아네 <b>13,000원</b></div>
+    <div class="box pe s" data-s="2"><b>해양생태공원</b>: 서준이네 <b>22,000원</b>, 진아네 <b>10,000원</b></div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">30 / 41</span></div></div></section>
+<section class="slide " data-steps="1"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">④ 행렬의 곱셈</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-think">생각해 보기</span><span class="t2"> 순서를 바꾸면?</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="center"><div class="eq"><span class="x lbl"><i>A</i> =</span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:44px;--cw:120px;--rh:64px;"><span class="c"><span>5000</span></span><span class="c"><span>3000</span></span><span class="c"><span>4000</span></span><span class="c"><span>2000</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span><span class="x lbl gapl"><i>B</i> =</span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:44px;--cw:80px;--rh:64px;"><span class="c"><span>4</span></span><span class="c"><span>2</span></span><span class="c"><span>3</span></span><span class="c"><span>1</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span></div></div>
+    <div class="center"><div class="eq"><span class="x lbl"><i>AB</i> =</span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:44px;--cw:130px;--rh:64px;"><span class="c"><span>29000</span></span><span class="c"><span>13000</span></span><span class="c"><span>22000</span></span><span class="c"><span>10000</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span></div></div>
+    <div class="q s" data-s="1"><b>?</b> 순서를 바꿔서 <i>BA</i>를 계산하면 <i>AB</i>와 같을까?</div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">31 / 41</span></div></div></section>
+<section class="slide " data-steps="4"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">④ 행렬의 곱셈</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-prob">풀이</span><span class="t2"> BA 계산</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="center"><div class="eq"><span class="x lbl"><i>B</i></span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:36px;--cw:70px;--rh:54px;"><span class="c r h" data-h="1 2"><span>4</span></span><span class="c r h" data-h="1 2"><span>2</span></span><span class="c r h" data-h="3 4"><span>3</span></span><span class="c r h" data-h="3 4"><span>1</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span><span class="x lbl">×</span><span class="x lbl"><i>A</i></span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:36px;--cw:100px;--rh:54px;"><span class="c cl h" data-h="1 3"><span>5000</span></span><span class="c cl h" data-h="2 4"><span>3000</span></span><span class="c cl h" data-h="1 3"><span>4000</span></span><span class="c cl h" data-h="2 4"><span>2000</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span></div></div>
+      <div class="center"><div class="eq"><span class="x lbl"><i>BA</i> =</span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:30px;--cw:250px;--rh:84px;"><span class="c xx rc h" data-h="1"><span class="ph u" data-u="1">?</span><span class="ex s" data-s="1">4×5000 + 2×4000<br><b>= 28000</b></span></span><span class="c xx rc h" data-h="2"><span class="ph u" data-u="2">?</span><span class="ex s" data-s="2">4×3000 + 2×2000<br><b>= 16000</b></span></span><span class="c xx rc h" data-h="3"><span class="ph u" data-u="3">?</span><span class="ex s" data-s="3">3×5000 + 1×4000<br><b>= 19000</b></span></span><span class="c xx rc h" data-h="4"><span class="ph u" data-u="4">?</span><span class="ex s" data-s="4">3×3000 + 1×2000<br><b>= 11000</b></span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span></div></div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">32 / 41</span></div></div></section>
+<section class="slide " data-steps="2"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">④ 행렬의 곱셈</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-concept">비교</span><span class="t2"> AB와 BA</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="center cmp"><div class="eq"><span class="x lbl"><i>AB</i> =</span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:40px;--cw:120px;--rh:62px;"><span class="c"><span>29000</span></span><span class="c"><span>13000</span></span><span class="c"><span>22000</span></span><span class="c"><span>10000</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span><span class="x neq">≠</span><span class="x lbl"><i>BA</i> =</span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:40px;--cw:120px;--rh:62px;"><span class="c"><span>28000</span></span><span class="c"><span>16000</span></span><span class="c"><span>19000</span></span><span class="c"><span>11000</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span></div></div>
+    <div class="box s" data-s="1"><b><i>AB</i> ≠ <i>BA</i></b> (교환법칙이 성립하지 않는다)</div>
+    <div class="box pe s" data-s="2"><i>BA</i>의 성분은 의미가 섞여 경제적 뜻이 없다.</div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">33 / 41</span></div></div></section>
+<section class="slide " data-steps="4"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">④ 행렬의 곱셈</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-concept">개념 정리</span><span class="t2"> 거듭제곱</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="powers">
+      <div class="s" data-s="1"><i>AA</i> = <i>A</i><sup>2</sup></div>
+      <div class="s" data-s="2"><i>AAA</i> = <i>A</i><sup>3</sup></div>
+      <div class="s" data-s="3">…　<i>A</i>를 <i>n</i>개 곱한 것 = <i>A</i><sup><i>n</i></sup> <span class="sm2">(정사각행렬일 때)</span></div>
+    </div>
+    <div class="box pe s" data-s="4">(<i>AB</i>)<i>C</i> = <i>A</i>(<i>BC</i>)이므로 괄호 없이 <b><i>ABC</i></b>로 쓸 수 있다.</div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">34 / 41</span></div></div></section>
+<section class="slide " data-steps="3"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">⑤ 경제 속 수학 찾기</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-read">생각해 보기</span><span class="t2"> 카페 손님의 이동</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="two cafe">
+      <div class="svgbox"><svg viewBox="0 0 560 300" xmlns="http://www.w3.org/2000/svg">
+        <g class="nodes">
+          <circle cx="110" cy="170" r="78" fill="#EAF2F6" stroke="#2E6F95" stroke-width="5"/><text x="110" y="162" text-anchor="middle" font-size="46" font-weight="700" fill="#1F3B57">X</text><text x="110" y="205" text-anchor="middle" font-size="30" fill="#1F3B57">500명</text>
+          <circle cx="450" cy="170" r="78" fill="#FBEAE3" stroke="#C1573D" stroke-width="5"/><text x="450" y="162" text-anchor="middle" font-size="46" font-weight="700" fill="#1F3B57">Y</text><text x="450" y="205" text-anchor="middle" font-size="30" fill="#1F3B57">300명</text>
+        </g>
+        <g class="s" data-s="1">
+          <path d="M70 100 C 20 20, 200 20, 150 100" fill="none" stroke="#2E6F95" stroke-width="5"/><polygon points="150,100 132,88 158,82" fill="#2E6F95"/>
+          <text x="110" y="28" text-anchor="middle" font-size="30" font-weight="700" fill="#2E6F95">80%</text>
+          <path d="M184 140 C 250 100, 330 100, 372 140" fill="none" stroke="#2E6F95" stroke-width="5"/><polygon points="372,140 350,138 360,118" fill="#2E6F95"/>
+          <text x="280" y="96" text-anchor="middle" font-size="30" font-weight="700" fill="#2E6F95">20%</text>
+        </g>
+        <g class="s" data-s="2">
+          <path d="M410 100 C 360 20, 540 20, 490 100" fill="none" stroke="#C1573D" stroke-width="5"/><polygon points="490,100 472,88 498,82" fill="#C1573D"/>
+          <text x="450" y="28" text-anchor="middle" font-size="30" font-weight="700" fill="#C1573D">70%</text>
+          <path d="M372 205 C 330 250, 250 250, 184 205" fill="none" stroke="#C1573D" stroke-width="5"/><polygon points="184,205 206,207 196,227" fill="#C1573D"/>
+          <text x="280" y="268" text-anchor="middle" font-size="30" font-weight="700" fill="#C1573D">30%</text>
+        </g>
+      </svg></div>
+      <div class="vmid"><div class="box">동네 카페 X, Y<br>이번 달 손님: <b>X 500명, Y 300명</b></div>
+        <div class="box pe">매달 X 손님의 <b>80%</b>는 X에 남고 <b>20%</b>는 Y로 옮긴다.<br>매달 Y 손님의 <b>70%</b>는 Y에 남고 <b>30%</b>는 X로 옮긴다.</div></div>
+    </div>
+    <div class="q s" data-s="3"><b>?</b> 다음 달 카페별 손님 수를 예상해 보자</div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">35 / 41</span></div></div></section>
+<section class="slide " data-steps="3"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">⑤ 경제 속 수학 찾기</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-read">행렬로 나타내기</span><span class="t2"> 이동 비율과 이번 달 손님</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="two lr">
+    <div class="lcol">
+      <div class="lm lm-p">
+        <div class="lab"></div><div class="lab"></div>
+        <div class="lab">X에서</div><div class="lab">Y에서</div><div class="lab"></div>
+        <div class="lab">X로</div><div class="lpar"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg></div><span class="c cc1"><span>0.8</span></span><span class="c cc2"><span>0.3</span></span><div class="lpar"><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></div>
+        <div class="lab">Y로</div><span class="c cc1"><span>0.2</span></span><span class="c cc2"><span>0.7</span></span>
+      </div>
+      <div class="cap center">이동 비율 <i>P</i></div>
+    </div>
+    <div class="rcol">
+      <div class="box s" data-s="1"><b class="blue">첫째 열</b>: X 손님이 X, Y로 가는 비율</div>
+      <div class="box pe s" data-s="2"><b class="acc">둘째 열</b>: Y 손님이 X, Y로 가는 비율</div>
+      <div class="s" data-s="3"><div class="eq"><span class="x lbl"><i>x</i> =</span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(1,auto);font-size:46px;--cw:110px;--rh:62px;"><span class="c"><span>500</span></span><span class="c"><span>300</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span><span class="x lbl"><span class="sm2">이번 달 수요</span></span></div></div>
+    </div></div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">36 / 41</span></div></div></section>
+<section class="slide " data-steps="2"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">⑤ 경제 속 수학 찾기</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-read">다음 달 수요</span><span class="t2"> Px</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="center"><div class="eq"><span class="x lbl"><i>P</i> =</span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:44px;--cw:90px;--rh:62px;"><span class="c r h" data-h="1"><span>0.8</span></span><span class="c r h" data-h="1"><span>0.3</span></span><span class="c r h" data-h="2"><span>0.2</span></span><span class="c r h" data-h="2"><span>0.7</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span><span class="x lbl gapl"><i>x</i> =</span><span class="mx cl2"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(1,auto);font-size:44px;--cw:100px;--rh:62px;"><span class="c"><span>500</span></span><span class="c"><span>300</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span></div></div>
+    <div class="center"><div class="eq"><span class="x lbl"><i>Px</i> =</span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(1,auto);font-size:32px;--cw:330px;--rh:84px;"><span class="c xx rc h" data-h="1"><span class="ph u" data-u="1">?</span><span class="ex s" data-s="1">0.8×500 + 0.3×300<br><b>= 490</b></span></span><span class="c xx rc h" data-h="2"><span class="ph u" data-u="2">?</span><span class="ex s" data-s="2">0.2×500 + 0.7×300<br><b>= 310</b></span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span></div></div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">37 / 41</span></div></div></section>
+<section class="slide " data-steps="3"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">⑤ 경제 속 수학 찾기</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-read">생각해 보기</span><span class="t2"> 두 달 뒤는?</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="q"><b>?</b> 두 달 뒤는 어떻게 구할까?</div>
+    <div class="powers">
+      <div class="s" data-s="1">다음 달 수요 = <i>Px</i></div>
+      <div class="s" data-s="2">두 달 뒤 수요 = <i>P</i>(<i>Px</i>)</div>
+      <div class="s" data-s="3">= (<i>PP</i>)<i>x</i> = <b class="acc"><i>P</i><sup>2</sup><i>x</i></b></div>
+    </div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">38 / 41</span></div></div></section>
+<section class="slide " data-steps="2"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">⑤ 경제 속 수학 찾기</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-read">두 달 뒤 수요</span><span class="t2"> P²x</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="center"><div class="eq"><span class="x lbl"><i>P</i><sup>2</sup> = <i>PP</i> =</span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:36px;--cw:80px;--rh:54px;"><span class="c"><span>0.8</span></span><span class="c"><span>0.3</span></span><span class="c"><span>0.2</span></span><span class="c"><span>0.7</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:36px;--cw:80px;--rh:54px;"><span class="c"><span>0.8</span></span><span class="c"><span>0.3</span></span><span class="c"><span>0.2</span></span><span class="c"><span>0.7</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span><span class="x lbl">=</span><span class="mx"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:36px;--cw:86px;--rh:54px;"><span class="c"><span>0.70</span></span><span class="c"><span>0.45</span></span><span class="c"><span>0.30</span></span><span class="c"><span>0.55</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span></div></div>
+    <div class="center"><div class="eq"><span class="x lbl s" data-s="1"><i>P</i><sup>2</sup><i>x</i> =</span><span class="mx s" data-s="1"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(2,auto);font-size:36px;--cw:86px;--rh:54px;"><span class="c"><span>0.70</span></span><span class="c"><span>0.45</span></span><span class="c"><span>0.30</span></span><span class="c"><span>0.55</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span><span class="mx s" data-s="1"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(1,auto);font-size:36px;--cw:90px;--rh:54px;"><span class="c"><span>500</span></span><span class="c"><span>300</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span><span class="x lbl s" data-s="2">=</span><span class="mx xxm s" data-s="2"><svg class="pl" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M17 2 C3 22 3 78 17 98"/></svg><span class="g" style="grid-template-columns:repeat(1,auto);font-size:40px;--cw:90px;--rh:54px;"><span class="c"><span>485</span></span><span class="c"><span>315</span></span></span><svg class="pr" viewBox="0 0 20 100" preserveAspectRatio="none"><path d="M3 2 C17 22 17 78 3 98"/></svg></span></div></div>
+    <div class=" note s" data-s="2">두 달 뒤: <b>X 485명, Y 315명</b></div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">39 / 41</span></div></div></section>
+<section class="slide " data-steps="0"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">⑤ 경제 속 수학 찾기</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-read">정리</span><span class="t2"> 경제 속 수학 찾기</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="finalbox">행렬의 <b>곱셈</b>과 <b>거듭제곱</b>으로<br>여러 달 뒤의 수요를 예측할 수 있다.</div>
+    <div class="cap center">경제 속 수학 찾기 · 읽을거리</div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">40 / 41</span></div></div></section>
+<section class="slide " data-steps="5"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet">
+    <div class="stack"></div><div class="eyebrow">⑥ 정리</div><div class="rule"></div>
+    <div class="titlerow"><h1><span class="t1 c-concept">오늘의 핵심</span></h1></div><div class="rule"></div>
+    <div class="body"><div class="cards">
+      <div class="card s" data-s="1"><div class="ic">▦</div><div class="ct">표 → 행렬</div><div class="cd">숫자만 괄호로 묶기</div></div>
+      <div class="card s" data-s="2"><div class="ic">±</div><div class="ct">합 · 차</div><div class="cd">같은 위치끼리</div></div>
+      <div class="card s" data-s="3"><div class="ic">k</div><div class="ct">실수배</div><div class="cd">모든 성분에 <i>k</i>배</div></div>
+      <div class="card s" data-s="4"><div class="ic">×</div><div class="ct">곱셈</div><div class="cd">행 × 열</div></div>
+      <div class="card s acc" data-s="5"><div class="ic">≠</div><div class="ct"><i>AB</i> ≠ <i>BA</i></div><div class="cd">교환법칙 ✕</div></div>
+    </div></div><div class="bar"><span>광주하남 공동교육과정</span><span>경제수학 3단원 · 행렬과 경제</span><span class="pg">41 / 41</span></div></div></section>
+</div></div>
+<script>(function () {
+  var stage = document.getElementById('stage');
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var N = slides.length, cur = 0, now = 0;
+  var maxOf = function (i) { return +slides[i].getAttribute('data-steps') || 0; };
+
+  function apply() {
+    slides.forEach(function (s, i) { s.classList.toggle('active', i === cur); });
+    var sl = slides[cur], max = maxOf(cur);
+    sl.querySelectorAll('[data-s]').forEach(function (e) { e.classList.toggle('on', now >= +e.getAttribute('data-s')); });
+    sl.querySelectorAll('[data-u]').forEach(function (e) { e.classList.toggle('on', now < +e.getAttribute('data-u')); });
+    sl.querySelectorAll('[data-h]').forEach(function (e) { e.classList.toggle('hot', e.getAttribute('data-h').split(' ').indexOf(String(now)) >= 0); });
+    sl.querySelectorAll('[data-k]').forEach(function (e) { e.classList.toggle('hot', now >= +e.getAttribute('data-k')); });
+    for (var k = 0; k <= max + 1; k++) sl.classList.toggle('st' + k, now >= k);
+    try { history.replaceState(null, '', '#' + (cur + 1) + (now ? '.' + now : '')); } catch (e) {}
+  }
+  function next() {
+    if (now < maxOf(cur)) { now++; }
+    else if (cur < N - 1) { cur++; now = 0; }
+    apply();
+  }
+  function prev() {
+    if (now > 0) { now--; }
+    else if (cur > 0) { cur--; now = maxOf(cur); }
+    apply();
+  }
+  function fit() {
+    var vv = window.visualViewport;
+    var w = vv ? vv.width : window.innerWidth, h = vv ? vv.height : window.innerHeight;
+    stage.style.transform = 'scale(' + Math.min(w / 1280, h / 720) + ')';
+  }
+  window.addEventListener('resize', fit);
+  window.addEventListener('orientationchange', function () { setTimeout(fit, 50); setTimeout(fit, 300); });
+  if (window.visualViewport) window.visualViewport.addEventListener('resize', fit);
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fit);
+  fit(); setTimeout(fit, 300);
+
+  function toggleFull() {
+    var d = document, el = d.documentElement;
+    if (!d.fullscreenElement) { (el.requestFullscreen || el.webkitRequestFullscreen || function () {}).call(el); }
+    else { (d.exitFullscreen || d.webkitExitFullscreen || function () {}).call(d); }
+  }
+  document.addEventListener('keydown', function (e) {
+    var k = e.key;
+    if (k === 'ArrowRight' || k === ' ' || k === 'PageDown' || k === 'Enter') { next(); e.preventDefault(); }
+    else if (k === 'ArrowLeft' || k === 'PageUp' || k === 'Backspace') { prev(); e.preventDefault(); }
+    else if (k === 'Home') { cur = 0; now = 0; apply(); }
+    else if (k === 'End') { cur = N - 1; now = maxOf(cur); apply(); }
+    else if (k === 'f' || k === 'F') { toggleFull(); }
+  });
+  stage.addEventListener('click', function (e) {
+    var r = stage.getBoundingClientRect();
+    if ((e.clientX - r.left) / r.width < 0.25) prev(); else next();
+  });
+
+  var m = /^#(\d+)(?:\.(\w+))?$/.exec(location.hash);
+  if (m) {
+    cur = Math.min(N, Math.max(1, +m[1])) - 1;
+    if (m[2] === 'all') { now = maxOf(cur); document.body.classList.add('static'); }
+    else if (m[2]) { now = Math.min(+m[2], maxOf(cur)); document.body.classList.add('static'); }
+  }
+  apply();
+})();
+</script></body></html>
