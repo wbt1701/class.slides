@@ -386,6 +386,11 @@ table.tt2 th{background:var(--blue)}table.tt2 td{background:var(--bl)}
 .probslide.tall .timer{transform:translateY(-2px)}
 .probslide.tall .pcols{margin-top:10px}
 .probslide.tall .tt{font-size:48px}
+
+/* fullscreen button */
+#fsBtn{position:fixed;right:68px;bottom:14px;z-index:60;width:46px;height:46px;border-radius:50%;border:none;background:#fff;color:#2F63B8;font-size:24px;font-weight:700;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.35);opacity:.85;line-height:1}
+#fsBtn:hover{opacity:1}#fsBtn.on{background:#2F63B8;color:#fff;opacity:1}
+@media print{#fsBtn{display:none!important}}
 </style></head>
 <body><div id="vp"><div id="stage">
 <section class="slide cov " data-steps="0"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet"><div class="cover"><div class="ceb">Ⅱ. 집합과 명제 – 2. 명제</div><div class="cti"><span class="t1">명제와 조건</span></div><div class="cti2">명제 사이의 관계</div><div class="cline"></div><div class="cdesc">참과 거짓을 정확하게 말하는 수학의 언어를 배워 봐요.</div><div class="cno">2-5 · 공통수학2</div></div><div class="bar"><span>풍산고등학교</span><span>F : 전체화면 · ← → : 이동 · P : 펜</span><span class="pg">1 / 50</span></div></div><canvas class="ink" width="2560" height="1440"></canvas></section>
@@ -782,6 +787,7 @@ M834 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">�
     <div class="oxrow"><div class="ox o is" data-k="1">O</div><div class="ox x " >X</div></div>
     <div class="s qans" data-s="1"><span class="tag">정답</span> <b>O</b> &nbsp;명제와 대우의 참·거짓은 일치해요.</div></div><div class="bar"><span>풍산고등학교</span><span>공통수학2 · 2-5 명제와 조건, 명제 사이의 관계</span><span class="pg">50 / 50</span></div></div><canvas class="ink" width="2560" height="1440"></canvas></section>
 </div></div>
+<button id="fsBtn" title="전체화면 (F)">⛶</button>
 <button id="penBtn" title="펜 켜기/끄기 (P)">✎</button>
 <div id="pentools">
   <button data-tool="pen" class="on">펜</button><button data-tool="hl">형광펜</button><button data-tool="er">지우개</button>
@@ -831,9 +837,16 @@ M834 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">�
 
   function toggleFull() {
     var d = document, el = d.documentElement;
-    if (!d.fullscreenElement) { (el.requestFullscreen || el.webkitRequestFullscreen || function () {}).call(el); }
+    if (!(d.fullscreenElement || d.webkitFullscreenElement)) { (el.requestFullscreen || el.webkitRequestFullscreen || function () {}).call(el); }
     else { (d.exitFullscreen || d.webkitExitFullscreen || function () {}).call(d); }
   }
+  var fsBtn = document.getElementById('fsBtn'), de = document.documentElement;
+  var canFull = !!(de.requestFullscreen || de.webkitRequestFullscreen);
+  if (!canFull) { fsBtn.style.display = 'none'; }
+  fsBtn.addEventListener('click', function (e) { e.stopPropagation(); toggleFull(); fsBtn.blur(); });
+  function syncFs() { var on = !!(document.fullscreenElement || document.webkitFullscreenElement); fsBtn.classList.toggle('on', on); fsBtn.textContent = on ? '✕' : '⛶'; setTimeout(fit, 80); setTimeout(fit, 400); }
+  document.addEventListener('fullscreenchange', syncFs);
+  document.addEventListener('webkitfullscreenchange', syncFs);
   document.addEventListener('keydown', function (e) {
     var k = e.key;
     if (k === 'ArrowRight' || k === ' ' || k === 'PageDown' || k === 'Enter') { next(); e.preventDefault(); }
