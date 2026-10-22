@@ -212,6 +212,80 @@ body.printmode .slide{position:relative;display:block;width:1280px;height:720px;
 .vsmall .venn{max-width:66%}
 .probslide .ans{padding:4px 22px}
 .probslide .timer{padding:4px 10px 6px}
+
+/* ===== v2: original blue folder + soft pastel accents ===== */
+:root{--ink:#2B2F3A;--muted:#6C7280;--pink:#F3C3D3;--pinkd:#D9708F;--pinkl:#FDEEF3;--yel:#FFE9A8;--yeld:#E9BE5B;--yell:#FFF7DC;--bg:#DDE3EE;--blue:#5B8FDC;--blued:#2F63B8;--bluel:#EAF2FC}
+html,body{background:#2B2F3A}
+#stage{background:var(--bg)}
+.shade{background:#4574C2}
+.tab,.folder{background:#5B8FDC}
+.stack{background:linear-gradient(#D5DAE3,#D5DAE3) 0 4px/100% 1px no-repeat,linear-gradient(#D5DAE3,#D5DAE3) 0 8px/100% 1px no-repeat,linear-gradient(#D5DAE3,#D5DAE3) 0 12px/100% 1px no-repeat,linear-gradient(#EEF1F6,#EEF1F6) 0 0/100% 14px no-repeat}
+.rule{background:#C4C8D0}
+.eyebrow{color:#6C7280}
+.t1,.t1.c-concept{color:var(--blued);background:linear-gradient(transparent 62%,#FFEFB8 62%)}
+.t1.c-prob,.t1.c-think{color:#CF6A87;background:linear-gradient(transparent 62%,#FBDDE6 62%)}
+.t1.c-end{color:var(--blued)}
+.bar{background:#EBEEF3;color:#4B4F5A}
+.bar span+span::before{background:#3F4350}
+.bar .pg{color:#2B2F3A}
+.box{background:var(--bluel);border-left-color:#5B8FDC}
+.box.pe{background:var(--pinkl);border-left-color:#E8A0B8}
+.note{background:var(--yell);color:#5C4A12}
+.q{background:var(--pinkl);border-color:#E8A0B8;color:var(--ink)}
+.q b{background:#E8A0B8}
+.ans{border-color:#E8A0B8}
+.tag{background:#E8A0B8}
+.exbox{border-color:#BBD0F0}
+.exbox2{border-color:#FFE08A}
+.excard{background:var(--bluel)}
+.excard.pink,.ucard.pink,.vcard.pink,.sc.pink,.dc.pink,.st4.pink{background:var(--pinkl)}
+.ucard,.vcard,.sc,.cards3.c3b .dc,.st4{background:var(--bluel)}
+.goal{background:var(--bluel);border-color:#5B8FDC}
+.fc{border-color:#BBD0F0}.fc b{color:var(--blued)}
+.hc{border-color:#BBD0F0}.hn{color:#5B8FDC}
+.dn,.sh{color:var(--blued)}
+.sn{background:#5B8FDC}
+table.tt2 th{background:#5B8FDC}
+table.tt2 td{background:var(--bluel)}
+.bk{border-bottom-color:#E8A0B8}
+.bk.on{background:#FFF1BF;border-bottom-color:#E9BE5B;color:#B04068}
+.hl1{background:#FFF1BF}.hl2{background:#FBDDE6}
+.pit{background:#F6F9FE!important;border-color:#CFE0F6!important}
+.pst{border-bottom-color:#F6D3DE}
+.pl.hot{background:#FBE6EC}
+.fillbox{background:#F6F9FE;border-color:#CFE0F6}
+.timer{border-color:#FFE08A}
+.tb button{background:#FFF3CC;color:#5C4A12}.tb button:hover{background:#FFE9A8}
+.timer.run{border-color:#5B8FDC}
+.timer.warn{background:var(--pinkl);border-color:#E8A0B8}
+.timer.warn .tt,.timer.over .tt{color:#D2456F}
+.timeup{border-color:#E8A0B8;color:#D2456F}
+.rb{background:var(--bluel);border-color:#5B8FDC}.rb.orig{background:#FFEFB8;border-color:#E9BE5B}
+.rb.pinkb{background:var(--pinkl);border-color:#E8A0B8}
+.ra{color:#D9708F}
+.starline{background:var(--yell);color:#5C4A12}
+.finalbox{background:var(--bluel);border-color:#5B8FDC}.finalbox b{color:#CF6A87}
+.qs{border-color:#BBD0F0}
+.ox.x{border-color:#E8A0B8;color:#D9708F}.ox.x.is.hot{background:#E8A0B8}
+.ceb{color:#5B8FDC}
+.cti{color:var(--ink)}
+.cline{background:#5B8FDC}
+.cno{background:#FFE9A8;color:#5C4A12}
+.dvn{background:#5B8FDC;box-shadow:0 8px 0 #3E6FBD}
+.divslide .dvn{background:#5B8FDC;box-shadow:0 8px 0 #3E6FBD}
+#penBtn{color:#D9708F}#penBtn.on{background:#D9708F}
+#pentools button{background:var(--bluel)}#pentools button.on{background:#5B8FDC}
+#pentools .clr.on{box-shadow:0 0 0 3px #5B8FDC}
+.tg.t{background:#D8F1E6;color:#1B7A57}.tg.f{background:#FBDDE6;color:#B93C63}.tg.n{background:#FFF1BF;color:#7A5C0A}
+.vl.vk{color:#B93C63}
+.probslide .pst{font-size:28px}
+.probslide .pl{font-size:27px;line-height:1.42}
+.probslide .pcols{gap:16px}
+.probslide .phead{margin-bottom:0}
+
+/* v3: deeper navy frame */
+.tab,.folder{background:#2A4573}
+.shade{background:#1B2F55}
 </style></head>
 <body><div id="vp"><div id="stage">
 <section class="slide cov " data-steps="0"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet"><div class="cover"><div class="ceb">Ⅱ. 집합과 명제 – 2. 명제</div><div class="cti"><span class="t1">명제와 조건</span></div><div class="cti2">명제 사이의 관계</div><div class="cline"></div><div class="cdesc">참과 거짓을 정확하게 말하는 수학의 언어를 배워 봐요.</div><div class="cno">2-5 · 공통수학2</div></div><div class="bar"><span>풍산고등학교</span><span>F : 전체화면 · ← → : 이동 · P : 펜</span><span class="pg">1 / 57</span></div></div><canvas class="ink" width="2560" height="1440"></canvas></section>
