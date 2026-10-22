@@ -403,6 +403,18 @@ table.tt2 th{background:var(--blue)}table.tt2 td{background:var(--bl)}
 .probslide.compact .timer{transform:translateY(0)}
 .probslide.compact .tt{font-size:46px}
 .probslide.compact .tl{font-size:16px}
+
+/* table of contents */
+#tocBtn{position:fixed;right:122px;bottom:14px;z-index:60;width:46px;height:46px;border-radius:50%;border:none;background:#fff;color:#2F63B8;font-size:24px;font-weight:700;cursor:pointer;box-shadow:0 3px 12px rgba(0,0,0,.35);opacity:.85;line-height:1}
+#tocBtn:hover{opacity:1}#tocBtn.on{background:#2F63B8;color:#fff;opacity:1}
+#toc{position:fixed;right:14px;bottom:70px;z-index:70;width:330px;max-height:70vh;overflow:auto;background:#fff;border-radius:16px;box-shadow:0 10px 34px rgba(18,24,38,.4);padding:10px;display:none}
+#toc.open{display:block}
+#toc .toch{font-weight:800;color:#1F3B57;font-size:17px;padding:4px 10px 8px;border-bottom:2px solid #EAF2FC;margin-bottom:6px}
+#toc button{display:flex;justify-content:space-between;align-items:center;gap:10px;width:100%;border:none;background:none;border-radius:10px;padding:10px 12px;font-family:inherit;font-size:17px;font-weight:600;color:#2B2F3A;cursor:pointer;text-align:left}
+#toc button:hover{background:#EAF2FC}
+#toc button.here{background:#2F63B8;color:#fff}
+#toc button em{font-style:normal;font-size:14px;opacity:.7;white-space:nowrap}
+@media print{#tocBtn,#toc{display:none!important}}
 </style></head>
 <body><div id="vp"><div id="stage">
 <section class="slide cov " data-steps="0"><div class="shade"></div><div class="tab"></div><div class="folder"></div><div class="sheet"><div class="cover"><div class="ceb">Ⅱ. 집합과 명제 – 2. 명제</div><div class="cti"><span class="t1">명제와 조건</span></div><div class="cti2">명제 사이의 관계</div><div class="cline"></div><div class="cdesc">참과 거짓을 정확하게 말하는 수학의 언어를 배워 봐요.</div><div class="cno">2-5 · 공통수학2</div></div><div class="bar"><span>풍산고등학교</span><span>F : 전체화면 · ← → : 이동 · P : 펜</span><span class="pg">1 / 50</span></div></div><canvas class="ink" width="2560" height="1440"></canvas></section>
@@ -800,6 +812,8 @@ M834 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">�
     <div class="oxrow"><div class="ox o is" data-k="1">O</div><div class="ox x " >X</div></div>
     <div class="s qans" data-s="1"><span class="tag">정답</span> <b>O</b> &nbsp;명제와 대우의 참·거짓은 일치해요.</div></div><div class="bar"><span>풍산고등학교</span><span>공통수학2 · 2-5 명제와 조건, 명제 사이의 관계</span><span class="pg">50 / 50</span></div></div><canvas class="ink" width="2560" height="1440"></canvas></section>
 </div></div>
+<button id="tocBtn" title="목차 (M)">☰</button>
+<div id="toc"></div>
 <button id="fsBtn" title="전체화면 (F)">⛶</button>
 <button id="penBtn" title="펜 켜기/끄기 (P)">✎</button>
 <div id="pentools">
@@ -853,6 +867,37 @@ M834 80h400000v40h-400000z"/></svg></span></span></span><span class="vlist-s">�
     if (!(d.fullscreenElement || d.webkitFullscreenElement)) { (el.requestFullscreen || el.webkitRequestFullscreen || function () {}).call(el); }
     else { (d.exitFullscreen || d.webkitExitFullscreen || function () {}).call(d); }
   }
+  /* ===== table of contents (jump by section) ===== */
+  var tocBtn = document.getElementById('tocBtn'), tocBox = document.getElementById('toc');
+  function buildToc() {
+    var items = [{ i: 0, label: '표지' }];
+    slides.forEach(function (sl, i) {
+      if (!sl.classList.contains('divslide')) return;
+      var n = sl.querySelector('.dvn'), t = sl.querySelector('.dvt');
+      items.push({ i: i, label: (n ? n.textContent.trim() : '') + ' ' + (t ? t.textContent.trim() : '') });
+    });
+    tocBox.innerHTML = '<div class="toch">목차</div>' + items.map(function (it, k) {
+      var end = (items[k + 1] ? items[k + 1].i : N) - 1;
+      return '<button data-i="' + it.i + '" data-end="' + end + '"><span>' + it.label + '</span><em>' + (it.i + 1) + '쪽</em></button>';
+    }).join('');
+    [].forEach.call(tocBox.querySelectorAll('button'), function (b) {
+      b.addEventListener('click', function (e) { e.stopPropagation(); cur = +b.getAttribute('data-i'); now = 0; apply(); setToc(false); });
+    });
+  }
+  function markToc() {
+    [].forEach.call(tocBox.querySelectorAll('button'), function (b) {
+      b.classList.toggle('here', cur >= +b.getAttribute('data-i') && cur <= +b.getAttribute('data-end'));
+    });
+  }
+  function setToc(on) { tocBox.classList.toggle('open', on); tocBtn.classList.toggle('on', on); if (on) markToc(); }
+  buildToc();
+  tocBtn.addEventListener('click', function (e) { e.stopPropagation(); setToc(!tocBox.classList.contains('open')); tocBtn.blur(); });
+  document.addEventListener('click', function (e) { if (tocBox.classList.contains('open') && !tocBox.contains(e.target) && e.target !== tocBtn) setToc(false); });
+  document.addEventListener('keydown', function (e) {
+    if ((e.key === 'm' || e.key === 'M') && !e.ctrlKey && !e.metaKey) setToc(!tocBox.classList.contains('open'));
+    else if (e.key === 'Escape') setToc(false);
+  });
+
   var fsBtn = document.getElementById('fsBtn'), de = document.documentElement;
   var canFull = !!(de.requestFullscreen || de.webkitRequestFullscreen);
   if (!canFull) { fsBtn.style.display = 'none'; }
